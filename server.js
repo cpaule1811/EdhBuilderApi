@@ -36,7 +36,7 @@ const db = knex({
 app.use(express.urlencoded({extended: false}));
 app.use(helmet())
 app.use(express.json({limit: "1mb"}))
-app.use(cors({ origin: ['https://edh-builder-luicu.ondigitalocean.app/'] }))
+app.use(cors({ origin: 'https://edh-builder-luicu.ondigitalocean.app/' }))
 
 app.get('/', (req, res) => res.json("this is working"))
 // app.post('/updateEntries', (req,res) => { update.updateEntries(req, res, db, cardlist.filteredCardlist) })
