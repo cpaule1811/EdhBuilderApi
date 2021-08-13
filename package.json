@@ -1,0 +1,32 @@
+{
+  "name": "edh-builder-api",
+  "version": "1.0.0",
+  "description": "api to send card and user data to and from edh builder",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "edh-builder-api"
+  },
+  "author": "Charlie Edwards",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "5.0.1",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "google-auth-library": "^7.3.0",
+    "helmet": "^4.6.0",
+    "jsonwebtoken": "^8.5.1",
+    "knex": "^0.95.6",
+    "nodemailer": "^6.6.3",
+    "pg": "^8.6.0",
+    "redis": "^3.1.2",
+    "sanitizer": "^0.1.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
