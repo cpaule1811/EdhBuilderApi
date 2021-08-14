@@ -28,8 +28,6 @@ const commanders = require('./controllers/commanders')
 // const update = require('./controllers/updateEntries')
 const sanitize = require('./controllers/sanitize')
 
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
-
 const db = knex({ 
     client: 'pg', 
     connection: process.env.DATABASE_URL,
