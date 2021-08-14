@@ -30,7 +30,13 @@ const sanitize = require('./controllers/sanitize')
 
 const db = knex({ 
     client: 'pg', 
-    connection: process.env.DATABASE_URL,
+    connection : {
+        host: process.env.HOSTNAME,
+        user: process.env.USERNAME,
+        database: process.env.DATABASE, 
+        password: process.env.PASSWORD,
+        port: process.env.DATABASE_PORT
+    },
     ssl: {
         rejectUnauthorized: true,
         ca: process.env.CA_CERT
