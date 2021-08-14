@@ -77,4 +77,4 @@ app.get('/search', sanitize.sanitizeData, (req, res) => { search.search(req,res,
 app.get('/commanders', (req, res) => { commanders.getCommanders(req, res, db) })
 
 
-app.listen(process.env.PORT, () => { console.log('listening to server port:'+ process.env.PORT)})
+app.listen(process.env.PORT, () => { console.log('listening to server port:'+ process.env.CA_CERT)})
