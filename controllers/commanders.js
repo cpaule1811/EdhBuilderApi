@@ -2,7 +2,7 @@ const getCommanders = (req, res, db) => {
     
     db.raw(`select * from entrys 
     where "type" like 'Legendary Creature%' or "type" 
-    like 'Legendary Enchantment Creature%' or "oracle_text" like '%can be your commander%'
+    like 'Legendary Enchantment Creature%' or oracle_text like '%can be your commander%'
     order by "type";`)
     .then(commanders => { 
         console.log(commanders)
