@@ -25,8 +25,8 @@ const auth = require('./controllers/authorization')
 const sideboard = require('./controllers/sideboard')
 const search = require('./controllers/search')
 const commanders = require('./controllers/commanders')
-// const update = require('./controllers/updateEntries')
 const sanitize = require('./controllers/sanitize')
+const mail = require('./controllers/mail')
 
 const db = knex({ 
     client: 'pg', 
@@ -49,7 +49,6 @@ app.use(express.json({limit: "1mb"}))
 app.use(cors({ origin: ['https://edh-builder-luicu.ondigitalocean.app', 'https://edhbuilder.com.au'] }))
 
 app.get('/', (req, res) => res.json("this is working"))
-// app.post('/updateEntries', (req,res) => { update.updateEntries(req, res, db, cardlist.filteredCardlist) })
 app.put('/username', sanitize.sanitizeData, auth.requireAuth, (req, res) => { username.handleUsername(req, res, db) })
 app.post('/exceldecklist', auth.requireAuthEdit(db), (req, res) => { exceldecklist.handleExceldecklist(req, res, db) })
 app.get('/profile/:userID', auth.requireAuth, (req, res) => {  profile.handleProfile(req, res, db) })
@@ -67,7 +66,7 @@ app.post('/rating', (req, res) => { addRating.handleAddRating(req,res,db) })
 app.get('/recommend/:commander/:partner', (req, res) => { recommended.handleRecommended(req, res, db) })
 app.get('/leaderboard', (req, res) => { leaderboard.handleLeaderboard(req,res,db) })
 app.get('/signout', auth.requireAuth, (req, res) => { signin.signout(req,res) })
-// app.post('/send', sanitize.sanitizeData, (req, res) => { mail.handleMail(req,res, nodemailer) })
+app.post('/send', sanitize.sanitizeData, (req, res) => { mail.handleMail(req,res, nodemailer) })
 app.put('/sideboard', auth.requireAuthEdit(db), (req, res) => { sideboard.handleSideboard(req, res, db) })
 
 app.post('/signin', sanitize.sanitizeData, signin.signinAuthentication(db, bcrypt))

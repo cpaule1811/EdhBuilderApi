@@ -64,7 +64,7 @@ const signToken = (username, email) => {
 }
 
 const setToken = (token, userID) => { 
-    return Promise.resolve(redisClient.set(token, userID))
+    return Promise.resolve(redisClient.set(token, userID, 'EX', 60 * 60 * 24 * 3))
 }
 
 const createSessions = (user) => { 
