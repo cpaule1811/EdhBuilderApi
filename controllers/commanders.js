@@ -11,7 +11,7 @@ const getCommanders = (req, res, db) => {
             }
         return false;
         })
-        res.send(JSON.stringify(commanders));
+        res.send(commanders);
     })
     .catch(error => res.status(400).json("could not get commanders"))
 }
