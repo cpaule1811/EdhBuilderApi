@@ -5,7 +5,6 @@ const getCommanders = (req, res, db) => {
     like 'Legendary Enchantment Creature%' or oracle_text like '%can be your commander%'
     order by "type";`)
     .then(commanders => { 
-        console.log(commanders)
         res.send(commanders.rows);
     })
     .catch(error => res.status(400).json("could not get commanders"))

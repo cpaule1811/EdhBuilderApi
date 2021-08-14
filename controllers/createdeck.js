@@ -21,7 +21,7 @@ const handleCreatedeck = (req, res, db) => {
                     avgRating: 0.00
                 })
                 .returning('*')
-                .then(resp => {res.json(resp[0].deckID); console.log(resp)})
+                .then(resp => {res.json(resp[0].deckID)})
         
     })
         .catch(err => res.status(400).json(err))  

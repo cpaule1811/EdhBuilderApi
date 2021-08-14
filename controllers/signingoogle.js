@@ -3,7 +3,6 @@ const client = new OAuth2Client('950586625282-75oevgl4tfineao69jso6bsh0pio9v69.a
 
 const handleSigninGoogle = async (req, res, db) => { 
     const { token } = req.body
-    console.log(token)
     const ticket = await client.verifyIdToken({
         idToken: authorization,
         audience: process.env.CLIENT_ID

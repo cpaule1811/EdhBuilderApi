@@ -24,7 +24,7 @@ const handleRecommended = (req, res, db) => {
         }
         res.json(recommendedCard)
     })
-    .catch(err => { res.status(400).json('unable to get recommended'); console.log(err) })
+    .catch(err => { res.status(400).json('unable to get recommended') })
 }
 
 module.exports = { 
