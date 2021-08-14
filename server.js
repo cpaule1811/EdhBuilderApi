@@ -31,6 +31,10 @@ const sanitize = require('./controllers/sanitize')
 const db = knex({ 
     client: 'pg', 
     connection: process.env.DATABASE_URL,
+    ssl: {
+        rejectUnauthorized: true,
+        ca: process.env.CA_CERT
+    }
 })
 
 app.use(express.urlencoded({extended: false}));
