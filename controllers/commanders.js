@@ -1,8 +1,9 @@
 const getCommanders = (req, res, db) => {
     
-    db('entrys').select('*').returning('*')
+    db('entrys').select('*')
     .then(cardlist => {
-        let commanders = cardlist.filter(card => {
+        console.log(cardlist.rows[1])
+        let commanders = cardlist.rows.filter(card => {
             if (card.type.includes("Legendary Creature")) { 
                 return true;
             }
@@ -11,6 +12,7 @@ const getCommanders = (req, res, db) => {
             }
         return false;
         })
+        
         res.send(commanders);
     })
     .catch(error => res.status(400).json("could not get commanders"))
