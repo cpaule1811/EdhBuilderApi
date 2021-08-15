@@ -46,7 +46,7 @@ const db = knex({
 app.use(express.urlencoded({extended: false}));
 app.use(helmet())
 app.use(express.json({limit: "1mb"}))
-app.use(cors({ origin: ['https://edh-builder-luicu.ondigitalocean.app', 'https://edhbuilder.com.au'] }))
+app.use(cors({ origin: ['https://edh-builder-luicu.ondigitalocean.app', 'https://edhbuilder.com.au', 'http://localhost:3000'] }))
 
 app.get('/', (req, res) => { db.raw("select * from entrys limit 1;").then(item => res.json(item.rows[0])) })
 app.put('/username', sanitize.sanitizeData, auth.requireAuth, (req, res) => { username.handleUsername(req, res, db) })
