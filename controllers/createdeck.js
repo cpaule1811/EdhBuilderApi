@@ -5,7 +5,7 @@ const handleCreatedeck = (req, res, db) => {
     }
     db('entrys').select('*').whereIn("cardName", [commander, partner])
     .then(commanderData => {
-                const { cardName, imageUrl, imageUrl2, cardArt, color } = commanderData[0]
+                const { cardName, imageUrl, imageUrl2, cardArt, color, artist } = commanderData[0]
                 db('decks').insert({ 
                     deckName: deckName,
                     commander: cardName,
@@ -18,6 +18,7 @@ const handleCreatedeck = (req, res, db) => {
                     cardImagePartner: commanderData[1] ? commanderData[1].imageUrl: null,
                     cardImage2: imageUrl2, 
                     color: color,
+                    artist: artist,
                     avgRating: 0.00
                 })
                 .returning('*')

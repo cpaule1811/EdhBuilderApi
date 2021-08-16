@@ -3,7 +3,7 @@ const handleEditdeck = (req, res, db ) => {
     const { deckID } = req.params;
     db('entrys').select('*').whereIn("cardName", [commander, partner])
     .then(commanderData => {
-                const { cardName, imageUrl, imageUrl2, cardArt, color } = commanderData[0]
+                const { cardName, imageUrl, imageUrl2, cardArt, color, artist } = commanderData[0]
                 db('decks')
                 .where("deckID", deckID)
                 .update({ 
@@ -15,7 +15,8 @@ const handleEditdeck = (req, res, db ) => {
                     cardArt: cardArt,
                     cardImagePartner: commanderData[1] ? commanderData[1].imageUrl: null,
                     cardImage2: imageUrl2, 
-                    color: color
+                    color: color,
+                    artist: artist,
                 })
                 .returning('*')
                 .then(resp => {res.json(resp[0].deckID)})
