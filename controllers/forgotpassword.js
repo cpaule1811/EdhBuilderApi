@@ -23,7 +23,7 @@ const handleForgot = (req, res, db, nodemailer) => {
                 secure:true,
                 auth: {
                     type: 'OAuth2',
-                    user: process.env.FORGOT_EMAIL,
+                    user: process.env.GOOGLE_EMAIL,
                     clientId: process.env.GOOGLE_CLIENT_ID,
                     clientSecret: process.env.GOOGLE_SECRET,
                     refreshToken: process.env.GOOGLE_REFRESH,
@@ -32,10 +32,11 @@ const handleForgot = (req, res, db, nodemailer) => {
                 }
                 })
                 const mail = { 
-                    from: `"EDH Builder" <edhbuilder@gmail.com>`,
+                    from: `EDH Builder <${process.env.GOOGLE_EMAIL}>`,
                         to: resp.email,
                         subject: "EDH Builder Reset Password",
-                        text: `Click this link to register new password: https://edhbuilder.com.au/forgotpassword/${resp.ukey}`,
+                        text: `Looks like you have had trouble signing in /n /n
+                        Click this link to register new password: https://edhbuilder.com.au/forgotpassword/${resp.ukey}`,
                 }
                 console.log(mail)
                 transporter.sendMail(mail, (err, info) => {
