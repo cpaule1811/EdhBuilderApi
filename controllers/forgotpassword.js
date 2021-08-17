@@ -14,7 +14,6 @@ const handleForgot = (req, res, db, nodemailer) => {
             }
         })
         .then(resp => { 
-            console.log(resp)
             if(!resp.email) {
               return res.status(400).json("could not find user with that email address");
             }
@@ -33,14 +32,15 @@ const handleForgot = (req, res, db, nodemailer) => {
                 }
                 })
                 const mail = { 
-                    from: `EDH Builder`,
+                    from: `"EDH Builder" <edhbuilder@gmail.com>`,
                         to: resp.email,
                         subject: "EDH Builder Reset Password",
-                        text: `Click this link to register new password: https://edhbuilder.com.au/forgotpassword${resp.ukey}`,
+                        text: `Click this link to register new password: https://edhbuilder.com.au/forgotpassword/${resp.ukey}`,
                 }
                 console.log(mail)
                 transporter.sendMail(mail, (err, info) => {
                     if (err) { 
+                        console.log(err)
                         return res.status(400).json("could not send email")
                     }
                     else { 
