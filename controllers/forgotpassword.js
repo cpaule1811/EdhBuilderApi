@@ -35,21 +35,20 @@ const handleForgot = (req, res, db, nodemailer) => {
                     from: `EDH Builder <${process.env.GOOGLE_EMAIL}>`,
                         to: resp.email,
                         subject: "EDH Builder Reset Password",
-                        text: `Looks like you have had trouble signing in /n /n
-                        Click this link to register new password: https://edhbuilder.com.au/forgotpassword/${resp.ukey}`,
+                        text: `Hi there,\n\nLooks like you have had trouble signing in!\n\nClick this link to register a new password: https://edhbuilder.com.au/forgotpassword/${resp.ukey}\n\nkind regards, EDH Builder Admin`,
                 }
                 console.log(mail)
                 transporter.sendMail(mail, (err, info) => {
                     if (err) { 
                         console.log(err)
-                        return res.status(400).json("could not send email")
+                        return res.status(400).json("could not find user with that email address")
                     }
                     else { 
                         return res.json("Please check email for link to password reset form")
                     }
                 }) 
     })
-    .catch(err => res.status(400).json(err))
+    .catch(err => res.status(400).json("error, try again later"))
     }
 
     function randomString(len) {
