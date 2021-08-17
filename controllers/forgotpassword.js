@@ -6,9 +6,10 @@ const handleForgot = (req, res, db, nodemailer) => {
     .select('email')
     .where({email: email})
     .then(email => { 
-        if (email.rows[0]){
+        if (email){
             const ukey = randomString(20)
-            console.log(email.rows[0])
+            console.log(email[0])
+
             // redisClient.set(ukey, email.rows[0], 'EX', 60 * 15)
         //     let transporter = nodemailer.createTransport({ 
         //         host: 'smtp.gmail.com',
@@ -39,6 +40,7 @@ const handleForgot = (req, res, db, nodemailer) => {
         //        }
         //    }) 
         }
+        res.json(email)
     })
     .catch(err => res.status(400).json(err))
     }
