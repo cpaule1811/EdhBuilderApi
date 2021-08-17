@@ -38,6 +38,7 @@ const handleForgot = (req, res, db, nodemailer) => {
                         subject: "EDH Builder Reset Password",
                         text: `Click this link to register new password: https://edhbuilder.com.au/forgotpassword${resp.ukey}`,
                 }
+                console.log(mail)
                 transporter.sendMail(mail, (err, info) => {
                     if (err) { 
                         return res.status(400).json("could not send email")
