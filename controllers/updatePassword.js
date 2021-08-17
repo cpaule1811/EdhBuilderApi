@@ -4,7 +4,7 @@ const handleUpdatePassword = (req, res, db, bcrypt) => {
     const { authorization } = req.headers
     redisClient.get(authorization, (err, reply) => { 
         if (err || !reply) { 
-            res.status(400).json('unauthorized')
+            return res.status(400).json('unauthorized')
         }
         const { password } = req.body; 
         const saltRounds = 10;
