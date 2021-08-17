@@ -34,6 +34,5 @@ const handleUpdatePassword = (req, res, db, bcrypt) => {
 }
 
 module.exports= { 
-    handleUpdatePassword: handleUpdatePassword,
-    handle
+    handleUpdatePassword: handleUpdatePassword
 }
