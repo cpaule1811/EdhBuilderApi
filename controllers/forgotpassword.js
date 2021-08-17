@@ -40,7 +40,7 @@ const handleForgot = (req, res, db, nodemailer) => {
         //    }) 
         }
     })
-    .catch(err => res.json("could not find account"))
+    .catch(err => res.status(400).json(err)
     }
 
     function randomString(len) {
