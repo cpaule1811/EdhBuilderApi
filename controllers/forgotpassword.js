@@ -11,10 +11,11 @@ const handleForgot = (req, res, db, nodemailer) => {
              redisClient.set(ukey, email[0].email, 'EX', 60 * 15)
              return { ukey: ukey, email: email[0].email }
             }
-        throw error
         })
-        .catch(err => res.status(err).json("could not find user with that email address"))
         .then(resp => { 
+            if(!resp.email) {
+              return res.status(err).json("could not find user with that email address");
+            }
             let transporter = nodemailer.createTransport({ 
                 host: 'smtp.gmail.com',
                 port: 465,
