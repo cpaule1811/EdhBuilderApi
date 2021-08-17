@@ -56,7 +56,7 @@ const requireAuthAdmin = (req, res, next) => {
         return res.status(401).json('unauthorized')
     }
     return redisClient.get(authorization, (err, reply) => { 
-        if(err || !reply || reply !== 712) { 
+        if(err || !reply || reply !== process.env.admin) { 
             return res.status(401).json('unauthorized')
         }
         return next()
