@@ -6,19 +6,18 @@ const handleUpdatePassword = (req, res, db, bcrypt) => {
         if (err || !reply) { 
             res.status(400).json('unauthorized')
         }
-    })
-    .then(email => {
         const { password } = req.body; 
         const saltRounds = 10;
         bcrypt.hash(password, saltRounds).then(hash => { 
             db('login')
             .update({hash: hash})
-            .where('email', email)
+            .where('email', reply)
             .then(resp => { 
                 if (resp === 1) { 
-                    res.json('success')
+                   return res.json('success')
                 }
             })
+            .catch(err => res.status(400).json('Could not reset password'))
         })
         .catch(err => res.status(400).json('Could not reset password'))
     })
