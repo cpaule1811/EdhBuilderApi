@@ -2,7 +2,7 @@ const redisClient = require('./signin').redisClient
 
 const handleForgot = (req, res, db, nodemailer) => { 
     const { email } = req.body
-    db('reset')
+    db('users')
     .returning('email')
     .select('email')
     .where({email: email})
@@ -39,7 +39,8 @@ const handleForgot = (req, res, db, nodemailer) => {
                }
            }) 
         }
-    }) 
+    })
+    .catch(err => res.json("could not fin account"))
     }
 
     function randomString(len) {
