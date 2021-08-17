@@ -8,7 +8,13 @@ const handleForgot = (req, res, db, nodemailer) => {
     .then(email => { 
         if (email[0]){
             const ukey = randomString(20)
-            redisClient.set(ukey, email[0].email, 'EX', 60 * 15)
+            return redisClient.set(ukey, email[0].email, 'EX', 60 * 15)
+        }
+        })
+        .then(resp => { 
+            console.log(resp)
+            console.log(email[0].email)
+            console.log(ukey)
             let transporter = nodemailer.createTransport({ 
                 host: 'smtp.gmail.com',
                 port: 465,
@@ -22,22 +28,21 @@ const handleForgot = (req, res, db, nodemailer) => {
                     accessToken: process.env.GOOGLE_ACCESS,
                     expires: 1484314697598
                 }
-           })
-           const mail = { 
-               from: `EDH Builder`,
-                   to: email[0],
-                   subject: "EDH Builder Reset Password",
-                   text: `Click this link to register new password: https://edhbuilder.com.au/forgotpassword${ukey}`,
-           }
-           transporter.sendMail(mail, (err, info) => {
-               if (err) { 
-                 return res.status(err).json("could not send email")
-               }
-               else { 
-                  return res.json("Please check email for link to password reset form")
-               }
-           }) 
-        }
+                })
+                const mail = { 
+                    from: `EDH Builder`,
+                        to: email[0].email,
+                        subject: "EDH Builder Reset Password",
+                        text: `Click this link to register new password: https://edhbuilder.com.au/forgotpassword${ukey}`,
+                }
+                transporter.sendMail(mail, (err, info) => {
+                    if (err) { 
+                        return res.status(err).json("could not send email")
+                    }
+                    else { 
+                        return res.json("Please check email for link to password reset form")
+                    }
+                }) 
         res.status(400).json('Could not find account with that email')
     })
     .catch(err => res.status(400).json(err))
