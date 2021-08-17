@@ -6,41 +6,39 @@ const handleForgot = (req, res, db, nodemailer) => {
     .select('email')
     .where({email: email})
     .then(email => { 
-        if (email){
+        if (email[0].email){
             const ukey = randomString(20)
-            console.log(email[0])
-
-            // redisClient.set(ukey, email.rows[0], 'EX', 60 * 15)
-        //     let transporter = nodemailer.createTransport({ 
-        //         host: 'smtp.gmail.com',
-        //         port: 465,
-        //         secure:true,
-        //         auth: {
-        //             type: 'OAuth2',
-        //             user: process.env.FORGOT_EMAIL,
-        //             clientId: process.env.GOOGLE_CLIENT_ID,
-        //             clientSecret: process.env.GOOGLE_SECRET,
-        //             refreshToken: process.env.GOOGLE_REFRESH,
-        //             accessToken: process.env.GOOGLE_ACCESS,
-        //             expires: 1484314697598
-        //         }
-        //    })
-        //    const mail = { 
-        //        from: `EDH Builder`,
-        //            to: email[0],
-        //            subject: "EDH Builder Reset Password",
-        //            text: `Click this link to register new password: https://edhbuilder.com.au/forgotpassword${ukey}`,
-        //    }
-        //    transporter.sendMail(mail, (err, info) => {
-        //        if (err) { 
-        //         res.status(err).json("Message failed")
-        //        }
-        //        else { 
-        //            res.json("success")
-        //        }
-        //    }) 
+            redisClient.set(ukey, email[0].email, 'EX', 60 * 15)
+            let transporter = nodemailer.createTransport({ 
+                host: 'smtp.gmail.com',
+                port: 465,
+                secure:true,
+                auth: {
+                    type: 'OAuth2',
+                    user: process.env.FORGOT_EMAIL,
+                    clientId: process.env.GOOGLE_CLIENT_ID,
+                    clientSecret: process.env.GOOGLE_SECRET,
+                    refreshToken: process.env.GOOGLE_REFRESH,
+                    accessToken: process.env.GOOGLE_ACCESS,
+                    expires: 1484314697598
+                }
+           })
+           const mail = { 
+               from: `EDH Builder`,
+                   to: email[0],
+                   subject: "EDH Builder Reset Password",
+                   text: `Click this link to register new password: https://edhbuilder.com.au/forgotpassword${ukey}`,
+           }
+           transporter.sendMail(mail, (err, info) => {
+               if (err) { 
+                res.status(err).json("could you not find account with that email")
+               }
+               else { 
+                   res.json("Please check email for link to password reset form")
+               }
+           }) 
         }
-        res.json(email)
+        res.status(400).json('Could you not find account with that email')
     })
     .catch(err => res.status(400).json(err))
     }
