@@ -31,14 +31,14 @@ const handleForgot = (req, res, db, nodemailer) => {
            }
            transporter.sendMail(mail, (err, info) => {
                if (err) { 
-                res.status(err).json("could you not find account with that email")
+                 return res.status(err).json("could not send email")
                }
                else { 
-                   res.json("Please check email for link to password reset form")
+                  return res.json("Please check email for link to password reset form")
                }
            }) 
         }
-        res.status(400).json('Could you not find account with that email')
+        res.status(400).json('Could not find account with that email')
     })
     .catch(err => res.status(400).json(err))
     }
