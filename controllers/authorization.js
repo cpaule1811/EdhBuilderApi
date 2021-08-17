@@ -50,8 +50,22 @@ const requireAuthEdit = (db) => (req, res, next) => {
     })
 }
 
+const requireAuthAdmin = (req, res, next) => { 
+    const { authorization } = req.headers;
+    if (!authorization) { 
+        return res.status(401).json('unauthorized')
+    }
+    return redisClient.get(authorization, (err, reply) => { 
+        if(err || !reply || reply !== 712) { 
+            return res.status(401).json('unauthorized')
+        }
+        return next()
+    })
+}
+
 module.exports = { 
     requireAuth: requireAuth,
     requireAuthDecklist: requireAuthDecklist,
-    requireAuthEdit: requireAuthEdit
+    requireAuthEdit: requireAuthEdit,
+    requireAuthAdmin: requireAuthAdmin
 }

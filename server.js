@@ -25,6 +25,7 @@ const auth = require('./controllers/authorization')
 const sideboard = require('./controllers/sideboard')
 const search = require('./controllers/search')
 const commanders = require('./controllers/commanders')
+const newSet = require('./controllers/newSet')
 const sanitize = require('./controllers/sanitize')
 const mail = require('./controllers/mail')
 const reset = require('./controllers/updatePassword')
@@ -78,6 +79,7 @@ app.post('/forgotpassword', (req, res) => forgot.handleForgot(req, res, db, node
 
 app.get('/search', sanitize.sanitizeData, (req, res) => { search.search(req,res, db) })
 app.get('/commanders', (req, res) => { commanders.getCommanders(req, res, db) })
+app.post('/updateentries', sanitize.sanitizeData, auth.requireAuthAdmin, (req, res) => { newSet.updateEntries(req, res, db) })
 
 
 app.listen(process.env.PORT, () => { console.log('listening to server port:'+ process.env.PORT)})

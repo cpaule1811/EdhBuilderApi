@@ -1,5 +1,14 @@
 const redisClient = require('./signin').redisClient
 
+const handleValidUnique = () => {
+    redisClient.get(authorization, (err, reply) => {
+        if (err || !reply) { 
+            return res.status(400).json('unauthorized')
+        }
+        return res.json('valid')
+    })
+}
+
 const handleUpdatePassword = (req, res, db, bcrypt) => { 
     const { authorization } = req.headers
     redisClient.get(authorization, (err, reply) => { 
@@ -14,6 +23,7 @@ const handleUpdatePassword = (req, res, db, bcrypt) => {
             .where('email', reply)
             .then(resp => { 
                 if (resp === 1) { 
+                   redisClient.del(authorization)
                    return res.json('success')
                 }
             })
@@ -24,5 +34,6 @@ const handleUpdatePassword = (req, res, db, bcrypt) => {
 }
 
 module.exports= { 
-    handleUpdatePassword: handleUpdatePassword
+    handleUpdatePassword: handleUpdatePassword,
+    handle
 }
