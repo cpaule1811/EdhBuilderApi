@@ -2,7 +2,6 @@ const redisClient = require('./signin').redisClient
 
 const handleForgot = (req, res, db, nodemailer) => { 
     const { email } = req.body
-    console.log(email)
     db('users')
     .select('email')
     .where("email", email)
@@ -10,7 +9,6 @@ const handleForgot = (req, res, db, nodemailer) => {
             if (email[0]){
              const ukey = randomString(20)
              redisClient.set(ukey, email[0].email, 'EX', 60 * 15)
-             console.log(email[0])
              return { ukey: ukey, email: email[0].email }
             }
         })
@@ -38,7 +36,6 @@ const handleForgot = (req, res, db, nodemailer) => {
                         subject: "EDH Builder Reset Password",
                         text: `Hi there,\n\nLooks like you have had trouble signing in!\n\nClick this link to register a new password: https://edhbuilder.com.au/forgotpassword/${resp.ukey}\n\nkind regards, EDH Builder Admin`,
                 }
-                console.log(mail)
                 transporter.sendMail(mail, (err, info) => {
                     if (err) { 
                         console.log(err)
