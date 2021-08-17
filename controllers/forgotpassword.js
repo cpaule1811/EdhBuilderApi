@@ -48,7 +48,7 @@ const handleForgot = (req, res, db, nodemailer) => {
                     }
                 }) 
     })
-    .catch(err => res.status(400).json("error, try again later"))
+    .catch(err => {console.log(err); res.status(400).json("error, try again later") })
     }
 
     function randomString(len) {
