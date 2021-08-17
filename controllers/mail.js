@@ -8,9 +8,14 @@ const handleMail = (req, res, nodemailer) => {
          port: 465,
          secure:true,
          auth: {
-         user: process.env.CONTACT_USER,
-         pass: process.env.CONTACT_PASSWORD,
-        },
+            type: 'OAuth2',
+            user: process.env.GOOGLE_EMAIL,
+            clientId: process.env.GOOGLE_CLIENT_ID,
+            clientSecret: process.env.GOOGLE_SECRET,
+            refreshToken: process.env.GOOGLE_REFRESH,
+            accessToken: process.env.GOOGLE_ACCESS,
+            expires: 1484314697598
+        }
     })
     const mail = { 
         from: `"${name}" <${email}>`,

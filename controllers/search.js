@@ -4,7 +4,7 @@ const search = (req, res, db) => {
     db.raw(`SELECT * FROM entrys WHERE LOWER(REPLACE(REPLACE(REPLACE(REPLACE("cardName", '''',''), ',', ''), '-', ''), ' ', '')) like '%${nameFilter}' 
     or LOWER(REPLACE(REPLACE(REPLACE(REPLACE("cardName", '''',''), ',', ''), '-', ''), ' ', '')) like '${nameFilter}%'
     or LOWER(REPLACE(REPLACE(REPLACE(REPLACE("cardName", '''',''), ',', ''), '-', ''), ' ', '')) like '%${nameFilter}%'
-    order by LENGTH("cardName") limit 4;`)
+    ORDER BY LENGTH("cardName") limit 4;`)
     .then(searchedCards => {
          res.json(searchedCards.rows)
     })
