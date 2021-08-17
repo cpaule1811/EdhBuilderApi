@@ -2,9 +2,10 @@ const redisClient = require('./signin').redisClient
 
 const handleForgot = (req, res, db, nodemailer) => { 
     const { email } = req.body
+    console.log(email)
     db('users')
     .select('email')
-    .where({email: email})
+    .where("email", email)
     .then(email => { 
             if (email[0]){
              const ukey = randomString(20)
