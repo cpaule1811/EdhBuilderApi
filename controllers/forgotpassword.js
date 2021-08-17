@@ -38,7 +38,7 @@ const handleForgot = (req, res, db, nodemailer) => {
                 }
                 transporter.sendMail(mail, (err, info) => {
                     if (err) { 
-                        return res.status(err).json("could not send email")
+                        return res.status(400).json("could not send email")
                     }
                     else { 
                         return res.json("Please check email for link to password reset form")
