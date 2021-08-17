@@ -9,12 +9,14 @@ const handleForgot = (req, res, db, nodemailer) => {
             if (email[0]){
              const ukey = randomString(20)
              redisClient.set(ukey, email[0].email, 'EX', 60 * 15)
+             console.log(email[0])
              return { ukey: ukey, email: email[0].email }
             }
         })
         .then(resp => { 
+            console.log(resp)
             if(!resp.email) {
-              return res.status(err).json("could not find user with that email address");
+              return res.status(400).json("could not find user with that email address");
             }
             let transporter = nodemailer.createTransport({ 
                 host: 'smtp.gmail.com',
