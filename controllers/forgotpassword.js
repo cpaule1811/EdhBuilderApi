@@ -8,6 +8,7 @@ const handleForgot = (req, res, db, nodemailer) => {
     .where({email: email})
     .then(email => { 
         if (email.length){
+            const ukey = randomString(20)
             redisClient.set(ukey, email[0], 'EX', 60 * 15)
             let transporter = nodemailer.createTransport({ 
                 host: 'smtp.gmail.com',
@@ -39,6 +40,16 @@ const handleForgot = (req, res, db, nodemailer) => {
            }) 
         }
     }) 
+    }
+
+    function randomString(len) {
+        charSet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var randomString = '';
+        for (var i = 0; i < len; i++) {
+            var randomPoz = Math.floor(Math.random() * charSet.length);
+            randomString += charSet.substring(randomPoz,randomPoz+1);
+        }
+        return randomString;
     }
 
 

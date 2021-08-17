@@ -27,6 +27,8 @@ const search = require('./controllers/search')
 const commanders = require('./controllers/commanders')
 const sanitize = require('./controllers/sanitize')
 const mail = require('./controllers/mail')
+const reset = require('./controllers/updatePassword')
+const forgot = require('./controllers/forgotpassword')
 
 const db = knex({ 
     client: 'pg', 
@@ -71,6 +73,8 @@ app.put('/sideboard', auth.requireAuthEdit(db), (req, res) => { sideboard.handle
 
 app.post('/signin', sanitize.sanitizeData, signin.signinAuthentication(db, bcrypt))
 app.post('/register', sanitize.sanitizeData, signin.registerAuthentication(db, bcrypt))
+app.put('/resetpassword', (req, res) => reset.handleUpdatePassword(req, res, db, bcrypt))
+app.post('/forgotpassword', (req, res) => forgot.handleForgot(req, res, db, nodemailer))
 
 app.get('/search', sanitize.sanitizeData, (req, res) => { search.search(req,res, db) })
 app.get('/commanders', (req, res) => { commanders.getCommanders(req, res, db) })
