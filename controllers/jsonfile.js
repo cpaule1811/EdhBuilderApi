@@ -1,9 +1,16 @@
-const handleJsonFile = (req, res, fs) => {
+const handleJsonFile = async (req, res, fs, path) => {
     const { file } = req.files
     console.log(file)
-    var buf = Buffer.from(file.data)
-    console.log(json.stringify(buf))
-    console.log(buf.toJSON())
+    const savePath = path.join(__dirname, 'uploads', file.name)
+    await file.mv(savePath)
+    await fs.readFile(`../uploads/${file.name}`, (err, data) => {
+        if (err) { 
+            res.json('failure')
+        }
+        else { 
+            console.log(data)
+        }
+    })
     res.json('success')
 }
 
