@@ -2,18 +2,16 @@ const handleJsonFile = (req, res, db) => {
     const { file } = req.files
     const jsonString = file.data.toString()
     const jsonData = JSON.parse(jsonString).splice(20000, 2000)
-    console.log(jsonData.filter(item => item.cardName.includes("Gisela")))
-    res.send('success')
-        //  db.raw(
-        //     `UPDATE entrys
-        //     SET price = (case ${cardCases(jsonData)}
-        //                     end)
-        //     WHERE REPLACE(REPLACE(REPLACE(REPLACE("cardName", '''',''), ',', ''), '-', '') in (${whereCards(jsonData)});`)
-        // .then(resp => {
-        //     console.log(resp)
-        //    res.json("this worked")
-        // })
-        // .catch(err => { console.log(err); res.status(400).json('could not update') })
+    console.log()
+         db.raw(
+            `UPDATE entrys
+            SET price = (case ${cardCases(jsonData)}
+                            end)
+            WHERE REPLACE(REPLACE(REPLACE(REPLACE("cardName", '''',''), ',', ''), '-', ''), ' ', '') in (${whereCards(jsonData)});`)
+        .then(resp => {
+           res.json("this worked")
+        })
+        .catch(err => { console.log(err); res.status(400).json('could not update') })
 }
 
 const cardCases = (jsonData) => {
