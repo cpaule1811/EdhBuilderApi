@@ -1,13 +1,32 @@
-const handleJsonFile = (req, res) => {
+const handleJsonFile = (req, res, db) => {
     const { file } = req.files
-    // const filteredString = file.data.toString().replace('[', "").replace(']', "").split(',')
-    // console.log(filteredString[0], filteredString[1], filteredString[2])
-    // const jsonObj = BJSON.stringify({ buf: file.data })
     const jsonString = file.data.toString()
-    console.log(jsonString.substring(0,50))
     const jsonData = JSON.parse(jsonString)
-    console.log(jsonData)
+         db.raw(
+            `UPDATE entrys
+            SET price = (case ${cardCases(jsonData)}
+                            end)
+            WHERE "cardName" in (${whereCards(jsonData)});`)
+        .then(resp => {
+            console.log(resp)
+           res.json("this worked")
+        })
+        .catch(err => { console.log(err); res.status(400).json('could not update') })
     res.json('success')
+}
+
+const cardCases = (jsonData) => {
+    let cases = ""
+    jsonData.forEach(item => {
+        cases += `WHEN "cardName" = ${item.cardName} THEN ${item.price}} `
+    })
+    return cases
+}
+
+const whereCards = (jsonData) => { 
+    return jsonData.map(item => { 
+        item.cardName
+    }).join()
 }
 
 module.exports = { 
