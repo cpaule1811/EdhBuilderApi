@@ -18,14 +18,14 @@ const handleJsonFile = (req, res, db) => {
 const cardCases = (jsonData) => {
     let cases = ""
     jsonData.forEach(item => {
-        cases += `WHEN "cardName" = ${item.cardName} THEN ${item.price}} `
+        cases += `WHEN "cardName" = '${item.cardName}' THEN ${item.price}} `
     })
     return cases
 }
 
 const whereCards = (jsonData) => { 
     return jsonData.map(item => { 
-        return item.cardName
+        return `'${item.cardName}'`
     }).join()
 }
 
