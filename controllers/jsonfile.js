@@ -1,7 +1,7 @@
 const handleJsonFile = (req, res, db) => {
     const { file } = req.files
     const jsonString = file.data.toString()
-    const jsonData = JSON.parse(jsonString).splice(20000, 200)
+    const jsonData = JSON.parse(jsonString).splice(20000, 2000)
          db.raw(
             `UPDATE entrys
             SET price = (case ${cardCases(jsonData)}
