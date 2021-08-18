@@ -79,7 +79,7 @@ app.post('/forgotpassword', (req, res) => forgot.handleForgot(req, res, db, node
 
 app.get('/search', sanitize.sanitizeData, (req, res) => { search.search(req,res, db) })
 app.get('/commanders', (req, res) => { commanders.getCommanders(req, res, db) })
-app.post('/updateentries', sanitize.sanitizeData, auth.requireAuthAdmin, (req, res) => { newSet.updateEntries(req, res, db) })
+app.post('/updateentries', sanitize.sanitizeData, auth.requireAuthAdmin, (req, res) => { newSet.updateEntrys(req, res, db) })
 
 
 app.listen(process.env.PORT, () => { console.log('listening to server port:'+ process.env.PORT)})
