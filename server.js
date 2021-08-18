@@ -7,7 +7,6 @@ const nodemailer = require("nodemailer");
 const fileUpload = require("express-fileupload")
 const fs = require('fs')
 const path = require('path')
-const JSON = require('JSON')
 
 const app = express()
 
