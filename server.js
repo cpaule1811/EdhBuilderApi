@@ -5,8 +5,6 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const nodemailer = require("nodemailer");
 const fileUpload = require("express-fileupload")
-const fs = require('fs')
-const path = require('path')
 
 const app = express()
 
@@ -58,7 +56,7 @@ app.use(helmet())
 app.use(express.json({limit: "2mb"}))
 app.use(cors({ origin: ['https://edh-builder-luicu.ondigitalocean.app', 'https://edhbuilder.com.au', 'http://localhost:3000'] }))
 
-app.post('/jsonentrys', (req, res) => { jsonFile.handleJsonFile(req, res, JSON) })
+app.post('/jsonentrys', (req, res) => { jsonFile.handleJsonFile(req, res, db) })
 
 app.get('/', (req, res) => { db.raw("select * from entrys limit 1;").then(item => res.json(item.rows[0])) })
 app.put('/username', sanitize.sanitizeData, auth.requireAuth, (req, res) => { username.handleUsername(req, res, db) })
