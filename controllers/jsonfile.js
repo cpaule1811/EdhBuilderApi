@@ -2,17 +2,25 @@ const handleJsonFile = (req, res, db) => {
     const { file } = req.files
     const jsonString = file.data.toString()
     const jsonData = JSON.parse(jsonString)
-    console.log()
-         db.raw(
-            `UPDATE entrys
-            SET price = (case ${cardCases(jsonData)}
-                            end)
-            WHERE REPLACE(REPLACE(REPLACE(REPLACE("cardName", '''',''), ',', ''), '-', ''), ' ', '') in (${whereCards(jsonData)});`)
-        .then(resp => {
-            console.log(resp)
-           res.json("this worked")
-        })
-        .catch(err => { console.log(err); res.status(400).json('could not update') })
+    db(entrys).insert(jsonData)
+    .returning('cardName')
+    .onConflict('cardName')
+    .merge(['cardName', 'email'])
+    .then(resp => {
+        console.log(resp)
+        res.json(resp)
+    })
+    .catch(err => { console.log(err); res.status(400).json(err)})
+        //  db.raw(
+        //     `UPDATE entrys
+        //     SET price = (case ${cardCases(jsonData)}
+        //                     end)
+        //     WHERE REPLACE(REPLACE(REPLACE(REPLACE("cardName", '''',''), ',', ''), '-', ''), ' ', '') in (${whereCards(jsonData)});`)
+        // .then(resp => {
+        //     console.log(resp)
+        //    res.json("this worked")
+        // })
+        // .catch(err => { console.log(err); res.status(400).json('could not update') })
 }
 
 const cardCases = (jsonData) => {
