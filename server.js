@@ -4,6 +4,7 @@ const knex = require('knex');
 const express = require('express');
 const bcrypt = require('bcrypt');
 const nodemailer = require("nodemailer");
+const fileUpload = require("express-fileupload")
 
 const app = express()
 
@@ -47,6 +48,9 @@ const db = knex({
     }
 })
 
+app.use(fileUpload({
+    limits: { fileSize: 3 * 1024 * 1024 },
+  }));
 app.use(express.urlencoded({extended: false}));
 app.use(helmet())
 app.use(express.json({limit: "2mb"}))
