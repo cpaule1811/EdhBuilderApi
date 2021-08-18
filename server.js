@@ -56,8 +56,6 @@ app.use(helmet())
 app.use(express.json({limit: "2mb"}))
 app.use(cors({ origin: ['https://edh-builder-luicu.ondigitalocean.app', 'https://edhbuilder.com.au', 'http://localhost:3000'] }))
 
-app.post('/jsonentrys', (req, res) => { jsonFile.handleJsonFile(req, res, db) })
-
 app.get('/', (req, res) => { db.raw("select * from entrys limit 1;").then(item => res.json(item.rows[0])) })
 app.put('/username', sanitize.sanitizeData, auth.requireAuth, (req, res) => { username.handleUsername(req, res, db) })
 app.post('/exceldecklist', auth.requireAuthEdit(db), (req, res) => { exceldecklist.handleExceldecklist(req, res, db) })
@@ -87,6 +85,7 @@ app.post('/forgotpassword', (req, res) => forgot.handleForgot(req, res, db, node
 app.get('/search', sanitize.sanitizeData, (req, res) => { search.search(req,res, db) })
 app.get('/commanders', (req, res) => { commanders.getCommanders(req, res, db) })
 app.post('/updateentries', auth.requireAuthAdmin, (req, res) => { newSet.updateEntrys(req, res, db) })
+app.post('/jsonentrys', auth.requireAuthAdmin, (req, res) => { jsonFile.handleJsonFile(req, res, db) })
 
 
 app.listen(process.env.PORT, () => { console.log('listening to server port:'+ process.env.PORT)})
