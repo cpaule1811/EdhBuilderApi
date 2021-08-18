@@ -3,7 +3,7 @@ const handleJsonFile = async (req, res, fs, path) => {
     console.log(file)
     const savePath = path.join(__dirname, 'uploads', file.name)
     await file.mv(savePath)
-    await fs.readFile(`/uploads/${file.name}`, (err, data) => {
+    await fs.readFile(savePath, (err, data) => {
         if (err) { 
             res.json('failure')
         }
