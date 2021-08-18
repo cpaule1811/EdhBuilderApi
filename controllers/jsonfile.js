@@ -6,7 +6,7 @@ const handleJsonFile = (req, res, db) => {
             `UPDATE entrys
             SET price = (case ${cardCases(jsonData)}
                             end)
-            WHERE LOWER(REPLACE(REPLACE(REPLACE(REPLACE("cardName", '''',''), ',', ''), '-', '') in (${whereCards(jsonData)});`)
+            WHERE REPLACE(REPLACE(REPLACE(REPLACE("cardName", '''',''), ',', ''), '-', '') in (${whereCards(jsonData)});`)
         .then(resp => {
             console.log(resp)
            res.json("this worked")
