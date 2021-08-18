@@ -1,7 +1,7 @@
 const handleJsonFile = (req, res, db) => {
     const { file } = req.files
     const jsonString = file.data.toString()
-    const jsonData = JSON.parse(jsonString).splice(20000, 2000)
+    const jsonData = JSON.parse(jsonString)
     console.log()
          db.raw(
             `UPDATE entrys
