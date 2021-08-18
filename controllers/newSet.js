@@ -2,6 +2,7 @@ const updateEntrys = (req, res, db) => {
     const { cardsToAdd } = req.body
     db('entrys')
     .insert(cardsToAdd)
+    .returning('*')
     .onConflict('cardName')
     .merge()
     .then(resp => { 
