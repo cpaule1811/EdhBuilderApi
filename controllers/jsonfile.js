@@ -10,6 +10,7 @@ const handleJsonFile = (req, res, db) => {
             WHERE REPLACE(REPLACE(REPLACE(REPLACE("cardName", '''',''), ',', ''), '-', ''), ' ', '') in (${whereCards(jsonData)});`)
         .then(resp => {
            res.json("this worked")
+           console.log(resp)
         })
         .catch(err => { console.log(err); res.status(400).json('could not update') })
 }
