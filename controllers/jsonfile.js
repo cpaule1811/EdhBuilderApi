@@ -5,7 +5,7 @@ const handleJsonFile = (req, res, db) => {
     db('entrys').insert(jsonData)
     .returning('cardName')
     .onConflict('cardName')
-    .merge(['cardName', 'email'])
+    .merge(['cardName', 'price'])
     .then(resp => {
         console.log(resp)
         res.json(resp)
