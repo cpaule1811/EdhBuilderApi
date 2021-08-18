@@ -2,7 +2,7 @@ const handleJsonFile = (req, res, db) => {
     const { file } = req.files
     const jsonString = file.data.toString()
     const jsonData = JSON.parse(jsonString)
-    db(entrys).insert(jsonData)
+    db('entrys').insert(jsonData)
     .returning('cardName')
     .onConflict('cardName')
     .merge(['cardName', 'email'])
