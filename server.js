@@ -30,6 +30,7 @@ const sanitize = require('./controllers/sanitize')
 const mail = require('./controllers/mail')
 const reset = require('./controllers/updatePassword')
 const forgot = require('./controllers/forgotpassword')
+const jsonFile = require('./controllers/jsonfile')
 
 const db = knex({ 
     client: 'pg', 
@@ -48,8 +49,10 @@ const db = knex({
 
 app.use(express.urlencoded({extended: false}));
 app.use(helmet())
-app.use(express.json({limit: "1mb"}))
+app.use(express.json({limit: "2mb"}))
 app.use(cors({ origin: ['https://edh-builder-luicu.ondigitalocean.app', 'https://edhbuilder.com.au', 'http://localhost:3000'] }))
+
+app.post('/jsonentrys', (req, res) => { jsonFile.handleJsonFile(req, res) })
 
 app.get('/', (req, res) => { db.raw("select * from entrys limit 1;").then(item => res.json(item.rows[0])) })
 app.put('/username', sanitize.sanitizeData, auth.requireAuth, (req, res) => { username.handleUsername(req, res, db) })
