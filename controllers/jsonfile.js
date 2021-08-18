@@ -2,16 +2,17 @@ const handleJsonFile = (req, res, db) => {
     const { file } = req.files
     const jsonString = file.data.toString()
     const jsonData = JSON.parse(jsonString)
-         db.raw(
-            `UPDATE entrys
-            SET price = (case ${cardCases(jsonData)}
-                            end)
-            WHERE "cardName" in (${whereCards(jsonData)});`)
-        .then(resp => {
-            console.log(resp)
-           res.json("this worked")
-        })
-        .catch(err => { console.log(err); res.status(400).json('could not update') })
+    console.log(whereCards(jsonData))
+        //  db.raw(
+        //     `UPDATE entrys
+        //     SET price = (case ${cardCases(jsonData)}
+        //                     end)
+        //     WHERE "cardName" in (${whereCards(jsonData)});`)
+        // .then(resp => {
+        //     console.log(resp)
+        //    res.json("this worked")
+        // })
+        // .catch(err => { console.log(err); res.status(400).json('could not update') })
     res.json('success')
 }
 
