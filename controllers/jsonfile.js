@@ -5,7 +5,7 @@ const handleJsonFile = (req, res) => {
     // const filteredString = file.data.toString().replace('[', "").replace(']', "").split(',')
     // console.log(filteredString[0], filteredString[1], filteredString[2])
     // const jsonObj = BJSON.stringify({ buf: file.data })
-    const jsonData = file.data.toJSON()
+    const jsonData = JSON.parse(file.data.toString())
     console.log(jsonData)
     console.log(jsonData[1])
     res.json('success')
