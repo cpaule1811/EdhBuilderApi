@@ -1,6 +1,6 @@
 const handleJsonFile = (req, res, fs) => {
     const { file } = req.files
-    fs.readFile(file.name, (err, data) => {
+    fs.readFile('/' + file.name, (err, data) => {
         if (err){ 
             console.log(err)
         }
