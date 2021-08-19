@@ -45,7 +45,7 @@ const handleSignin = (req, res, db, bcrypt) => {
         }
        })
     })
-    .catch(err => Promise.reject('Invalid username or password'));
+    .catch(() => Promise.reject('Invalid username or password'));
 }
 
 const getAuthTokenId = (req, res) => {

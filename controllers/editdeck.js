@@ -1,7 +1,7 @@
 const handleEditdeck = (req, res, db ) => { 
     const { deckName, commander, deckDescription, partner } = req.body;
     const { deckID } = req.params;
-    db('entrys').select('*').whereIn("cardName", [commander, partner])
+    db('entrys').select('*').whereIn("cardName", [commander, partner ? partner : ""])
     .then(commanderData => {
                 const { cardName, imageUrl, imageUrl2, cardArt, color, artist } = commanderData[0]
                 db('decks')
