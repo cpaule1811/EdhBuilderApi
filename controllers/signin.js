@@ -88,10 +88,17 @@ const signinAuthentication = (db, bcrypt) => (req, res) => {
 
 const handleRegister = (req, res, db, bcrypt) => { 
     const { email, username, password } = req.body; 
+    if(!email, !username) { 
+         return Promise.reject('Please make sure all fields are filled out')
+    }
+    if (password.length < 8 || password.length > 20 )  {
+        return Promise.reject('Password must be between 8 and 20 characters')
+    }
     db('users').select('email').where('email', email)
     .then(resp => {
-        if(resp.rows[0]) {
-            Promise.reject('Looks like a user with that email address already exists')
+        console.log(resp)
+        if(resp[0]) {
+            return Promise.reject('Looks like a user with that email address already exists')
         }
     })
     const saltRounds = 10;
