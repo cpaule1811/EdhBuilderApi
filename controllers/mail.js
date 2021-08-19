@@ -28,7 +28,7 @@ const handleMail = (req, res, nodemailer) => {
          res.status(err).json("Message failed")
         }
         else { 
-            res.json("success")
+            res.json("Message successfully sent!")
         }
     })  
 }

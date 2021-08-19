@@ -16,7 +16,7 @@ const handleAddcard = (req, res, db) => {
             res.json({card: card[0], resp: true})
         })
     })  
-    .catch(err => { res.status(400).json('unable to add card to deck') })
+    .catch(() => { res.status(400).json('unable to add card to deck') })
 }
 
 module.exports = { 
