@@ -21,7 +21,7 @@ const handleMail = (req, res, nodemailer) => {
         from: `"${name}" <${email}>`,
             to: process.env.CONTACT_TO,
             subject: subject,
-            text: message + `regards, ${name} ${email}`,
+            text: message + `\n\nregards, ${name} ${email}`,
     }
     transporter.sendMail(mail, (err, info) => {
         if (err) { 
