@@ -79,8 +79,8 @@ app.put('/username', sanitize.sanitizeData, auth.requireAuth, (req, res) => { us
 app.get('/profile/:userID', auth.requireAuth, (req, res) => {  profile.handleProfile(req, res, db) })
 app.post('/signin', sanitize.sanitizeData, signin.signinAuthentication(db, bcrypt))
 app.post('/register', sanitize.sanitizeData, signin.registerAuthentication(db, bcrypt))
-app.put('/resetpassword', (req, res) => reset.handleUpdatePassword(req, res, db, bcrypt))
-app.post('/forgotpassword', (req, res) => forgot.handleForgot(req, res, db, nodemailer))
+app.put('/resetpassword', sanitize.sanitizeData, (req, res) => reset.handleUpdatePassword(req, res, db, bcrypt))
+app.post('/forgotpassword', sanitize.sanitizeData, (req, res) => forgot.handleForgot(req, res, db, nodemailer))
 app.get('/checkresetvalid', (req, res) => reset.handleValidUnique(req, res))
 app.get('/signout', auth.requireAuth, (req, res) => { signin.signout(req,res) })
 
