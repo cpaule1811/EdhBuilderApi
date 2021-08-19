@@ -88,6 +88,12 @@ const signinAuthentication = (db, bcrypt) => (req, res) => {
 
 const handleRegister = (req, res, db, bcrypt) => { 
     const { email, username, password } = req.body; 
+    db('users').select('email').where('email', email)
+    .then(resp => {
+        if(resp.rows[0]) {
+            Promise.reject('Looks like a user with that email address already exists')
+        }
+    })
     const saltRounds = 10;
     return bcrypt.hash(password, saltRounds).then(hash => { 
        return db.transaction(trx => { 
