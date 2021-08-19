@@ -7,10 +7,12 @@ const handleJsonFile = (req, res, db) => {
     .onConflict('cardName')
     .merge(['cardName', 'price'])
     .then(resp => {
-        console.log(resp)
-        res.json(resp)
+        if(res.length) { 
+            return res.json('success')
+        }
+        res.json('failue')
     })
-    .catch(err => { console.log(err); res.status(400).json(err)})
+    .catch(err => { res.status(400).json(err)})
 }
 
 module.exports = { 

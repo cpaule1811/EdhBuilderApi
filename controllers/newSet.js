@@ -9,6 +9,7 @@ const updateEntrys = (req, res, db) => {
         if (resp.length){
             res.json('success')
         }
+        res.status(400).json('failure')
     })
     .catch((err) => { console.log(err); res.status(400).json('failure') })
 }

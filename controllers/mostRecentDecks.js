@@ -1,7 +1,7 @@
 const handleMostRecent = (req, res, db) => { 
     const { pn } = req.params  
     
-    db('users').select([{userID: 'users.userID'}, {deckID: 'decks.deckID'}, 'username', 'avgRating', 'commander', 'deckName', 'deckDescription', 'partner', 'cardArt', 'cardImage', 'cardImagePartner', 'cardImage2', 'color'])
+    db('users').select([{userID: 'users.userID'}, {deckID: 'decks.deckID'}, 'username', 'avgRating', 'commander', 'deckName', 'deckDescription', 'partner', 'cardArt', 'cardImage', 'cardImagePartner', 'cardImage2', 'color', 'artist'])
     .rightJoin('decks', 'users.userID', '=', 'decks.userID')
     .orderBy('decks.created', 'desc')
     .then(response => res.json(response.slice(8*pn-8, 8*pn)))
@@ -18,7 +18,7 @@ const getDecksLength = (req, res, db) => {
 const handleMostRecentPriv = (req, res, db) => { 
     const { pn, userid } = req.params
         
-    db('users').select([{userID: 'users.userID'}, {deckID: 'decks.deckID'}, 'username','avgRating', 'commander', 'deckName', 'deckDescription', 'partner', 'cardArt', 'cardImage', 'cardImagePartner', 'cardImage2', 'color'])
+    db('users').select([{userID: 'users.userID'}, {deckID: 'decks.deckID'}, 'username','avgRating', 'commander', 'deckName', 'deckDescription', 'partner', 'cardArt', 'cardImage', 'cardImagePartner', 'cardImage2', 'color', 'artist'])
     .rightJoin('decks', 'users.userID', '=', 'decks.userID')
     .orderBy('decks.created', 'desc')
     .where('decks.userID', '=', userid)
