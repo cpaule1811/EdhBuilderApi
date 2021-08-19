@@ -38,7 +38,7 @@ const handleSignin = (req, res, db, bcrypt) => {
             return db.select('*').from('users')
             .where('email', '=', email)
             .then(user => user[0])
-            .catch(err => Promise.reject('unable to get user'))
+            .catch(() => Promise.reject('unable to get user'))
         }
         else { 
             return Promise.reject('Invalid username or password');

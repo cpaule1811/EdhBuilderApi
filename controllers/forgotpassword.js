@@ -38,7 +38,6 @@ const handleForgot = (req, res, db, nodemailer) => {
                 }
                 transporter.sendMail(mail, (err, info) => {
                     if (err) { 
-                        console.log(err)
                         return res.status(400).json("could not find user with that email address")
                     }
                     else { 
@@ -46,7 +45,7 @@ const handleForgot = (req, res, db, nodemailer) => {
                     }
                 }) 
     })
-    .catch(err => {console.log(err); res.status(400).json("error, try again later") })
+    .catch(err => {res.status(400).json("error, try again later") })
     }
 
     function randomString(len) {

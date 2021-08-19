@@ -11,7 +11,7 @@ const updateEntrys = (req, res, db) => {
         }
         res.status(400).json('failure')
     })
-    .catch((err) => { console.log(err); res.status(400).json('failure') })
+    .catch((err) => { res.status(400).json('failure') })
 }
 
 module.exports = { 

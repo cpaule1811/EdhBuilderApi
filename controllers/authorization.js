@@ -53,7 +53,6 @@ const requireAuthEdit = (db) => (req, res, next) => {
 const requireAuthAdmin = (req, res, next) => { 
     const { authorization } = req.headers;
     if (!authorization) { 
-        console.log(authorization)
         return res.status(401).json('unauthorized')
     }
     return redisClient.get(authorization, (err, reply) => { 
