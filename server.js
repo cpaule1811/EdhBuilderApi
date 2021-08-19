@@ -81,6 +81,7 @@ app.post('/signin', sanitize.sanitizeData, signin.signinAuthentication(db, bcryp
 app.post('/register', sanitize.sanitizeData, signin.registerAuthentication(db, bcrypt))
 app.put('/resetpassword', (req, res) => reset.handleUpdatePassword(req, res, db, bcrypt))
 app.post('/forgotpassword', (req, res) => forgot.handleForgot(req, res, db, nodemailer))
+app.get('/checkresetvalid', (req, res) => reset.handleValidUnique(req, res))
 
 app.get('/search', sanitize.sanitizeData, (req, res) => { search.search(req,res, db) })
 app.get('/commanders', (req, res) => { commanders.getCommanders(req, res, db) })

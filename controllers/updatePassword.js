@@ -1,9 +1,10 @@
 const redisClient = require('./signin').redisClient
 
-const handleValidUnique = () => {
+const handleValidUnique = (req, res) => {
+    const { authorization } = req.headers
     redisClient.get(authorization, (err, reply) => {
         if (err || !reply) { 
-            return res.status(400).json('unauthorized')
+            return res.status(401).json('unauthorized')
         }
         return res.json('valid')
     })
@@ -34,5 +35,6 @@ const handleUpdatePassword = (req, res, db, bcrypt) => {
 }
 
 module.exports= { 
-    handleUpdatePassword: handleUpdatePassword
+    handleUpdatePassword: handleUpdatePassword,
+    handleValidUnique: handleValidUnique
 }
