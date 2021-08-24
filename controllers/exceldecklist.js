@@ -19,8 +19,8 @@ const handleExceldecklist = (req, res, db) => {
             .returning('*')
             .onConflict(['cardName', 'deckID'])
             .merge()
-            .then((cards) => { res.json(cards) })
-            .catch((error) => { res.status(400).json('could not add cards from excel') });
+            .then(() => { res.json("success") })
+            .catch(() => { res.status(400).json('could not add cards from excel') });
         })
 }
 

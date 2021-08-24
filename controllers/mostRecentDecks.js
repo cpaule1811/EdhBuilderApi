@@ -35,7 +35,6 @@ const getDecksLengthPriv = (req, res, db) => {
     .catch(err => res.status(400).json('unable to get number of decks'))
 }
 
-
 module.exports = { 
     handleMostRecent: handleMostRecent,
     getDecksLength: getDecksLength,
