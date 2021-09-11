@@ -3,6 +3,11 @@ const redis = require("redis");
 const redisClient = redis.createClient({  
     url: process.env.REDIS_URL
     });
+
+redisClient.on("error", function(error) {
+    console.error(error);
+});
+
 const { OAuth2Client } = require('google-auth-library')
 const googleClient = new OAuth2Client(process.env.GOOGLE_API_KEY)
 
@@ -65,8 +70,7 @@ const signToken = (username, email) => {
 }
 
 const setToken = (token, userID) => { 
-    // return Promise.resolve(redisClient.set(token, userID, 'EX', 60 * 60 * 24 * 3))
-    return Promise.resolve(redisClient.set(token, userID, 'EX', 60))
+    return Promise.resolve(redisClient.set(token, userID, 'EX', 259200))
 }
 
 const createSessions = (user) => { 
