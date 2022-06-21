@@ -34,19 +34,10 @@ const reset = require('./controllers/updatePassword')
 const forgot = require('./controllers/forgotpassword')
 const jsonFile = require('./controllers/jsonfile')
 
-const db = knex({ 
-    client: 'pg', 
-    connection : {
-        host: process.env.HOSTNAME,
-        user: process.env.USERNAME,
-        database: process.env.DATABASE, 
-        password: process.env.PASSWORD,
-        port: process.env.DATABASE_PORT,
-        ssl: {
-            rejectUnauthorized: true,
-            ca: process.env.CA_CERT
-        }
-    }
+const db = knex({
+    client: 'pg',
+    connection: process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: false }
 })
 
 app.use(fileUpload({
@@ -55,7 +46,7 @@ app.use(fileUpload({
 app.use(express.urlencoded({extended: false}));
 app.use(helmet())
 app.use(express.json({limit: "2mb"}))
-app.use(cors({ origin: ['https://edhbuilder.com.au'] }))
+app.use(cors({ origin: [process.env.ALLOWED_ORIGIN] }))
 app.use(compression())
 
 //site data get requests
@@ -95,6 +86,5 @@ app.delete('/removedeck/:deckID', (req, res) => { removedeck.handleRemovedeck(re
 app.post('/updateentries', auth.requireAuthAdmin, (req, res) => { newSet.updateEntrys(req, res, db) })
 app.post('/jsonentrys', auth.requireAuthAdmin, (req, res) => { jsonFile.handleJsonFile(req, res, db) })
 app.post('/send', sanitize.sanitizeData, (req, res) => { mail.handleMail(req,res, nodemailer) })
-
 
 app.listen(process.env.PORT, () => { console.log('listening to server port:'+ process.env.PORT)})
