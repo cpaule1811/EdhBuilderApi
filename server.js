@@ -9,16 +9,16 @@ const compression = require('compression')
 
 const app = express()
 
-const signin = require('./controllers/signin')
-const createdeck = require('./controllers/createdeck')
-const addcard = require('./controllers/addcard')
-const removecard = require('./controllers/removecard')
-const removedeck = require('./controllers/removedeck')
-const editdeck = require('./controllers/editdeck')
+const signIn = require('./controllers/signin')
+const createDeck = require('./controllers/createdeck')
+const addCard = require('./controllers/addcard')
+const removeCard = require('./controllers/removecard')
+const removeDeck = require('./controllers/removedeck')
+const editDeck = require('./controllers/editdeck')
 const profile = require('./controllers/profile')
-const exceldecklist = require('./controllers/exceldecklist')
+const excelDeckList = require('./controllers/exceldecklist')
 const username = require('./controllers/username')
-const getdeck = require('./controllers/getdeck')
+const getDeck = require('./controllers/getdeck')
 const recentDecks = require('./controllers/mostRecentDecks')
 const addRating = require('./controllers/addrating')
 const recommended = require('./controllers/recommended')
@@ -53,7 +53,7 @@ app.use(compression())
 //site data get requests
 app.get('/', (req, res) => res.json("hello world"))
 app.get('/requestdeck/:id/:userid', auth.requireAuthDecklist, (req, res) => {
-    getdeck.handleGetdeck(req, res, db)
+    getDeck.handleGetdeck(req, res, db)
 })
 app.get('/deckspub/:pn/:userid', (req, res) => {
     recentDecks.handleMostRecent(req, res, db)
@@ -73,13 +73,13 @@ app.get('/leaderboard', (req, res) => {
 
 // deck editor requests 
 app.post('/addcard', sanitize.sanitizeData, auth.requireAuthEdit(db), (req, res) => {
-    addcard.handleAddcard(req, res, db)
+    addCard.handleAddcard(req, res, db)
 })
 app.post('/removecard', auth.requireAuthEdit(db), (req, res) => {
-    removecard.handleRemovecard(req, res, db)
+    removeCard.handleRemovecard(req, res, db)
 })
 app.post('/editdeck/:deckID', sanitize.sanitizeData, (req, res) => {
-    editdeck.handleEditdeck(req, res, db)
+    editDeck.handleEditdeck(req, res, db)
 })
 app.post('/rating', (req, res) => {
     addRating.handleAddRating(req, res, db)
@@ -91,7 +91,7 @@ app.get('/search', sanitize.sanitizeData, (req, res) => {
     search.search(req, res, db)
 })
 app.post('/exceldecklist', auth.requireAuthEdit(db), (req, res) => {
-    exceldecklist.handleExceldecklist(req, res, db)
+    excelDeckList.handleExceldecklist(req, res, db)
 })
 app.get('/recommend/:commander/:partner', (req, res) => {
     recommended.handleRecommended(req, res, db)
@@ -104,24 +104,24 @@ app.put('/username', sanitize.sanitizeData, auth.requireAuth, (req, res) => {
 app.get('/profile/:userID', auth.requireAuth, (req, res) => {
     profile.handleProfile(req, res, db)
 })
-app.post('/signin', sanitize.sanitizeData, signin.signinAuthentication(db, bcrypt))
-app.post('/register', sanitize.sanitizeData, signin.registerAuthentication(db, bcrypt))
+app.post('/signin', sanitize.sanitizeData, signIn.signinAuthentication(db, bcrypt))
+app.post('/register', sanitize.sanitizeData, signIn.registerAuthentication(db, bcrypt))
 app.put('/resetpassword', sanitize.sanitizeData, (req, res) => reset.handleUpdatePassword(req, res, db, bcrypt))
 app.post('/forgotpassword', sanitize.sanitizeData, (req, res) => forgot.handleForgot(req, res, db, nodemailer))
 app.get('/checkresetvalid', (req, res) => reset.handleValidUnique(req, res))
 app.get('/signout', auth.requireAuth, (req, res) => {
-    signin.signout(req, res)
+    signIn.signout(req, res)
 })
 
 // create deck requests
 app.post('/createdeck', sanitize.sanitizeData, (req, res) => {
-    createdeck.handleCreatedeck(req, res, db)
+    createDeck.handleCreatedeck(req, res, db)
 })
 app.get('/commanders', (req, res) => {
     commanders.getCommanders(req, res, db)
 })
 app.delete('/removedeck/:deckID', (req, res) => {
-    removedeck.handleRemovedeck(req, res, db)
+    removeDeck.handleRemovedeck(req, res, db)
 })
 
 // other
