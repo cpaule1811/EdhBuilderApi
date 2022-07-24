@@ -4,14 +4,17 @@ module.exports = {
     development: {
         client: 'pg',
         connection: {
-            connectionString: databaseUrl,
-        },
+            connectionString: databaseUrl
+        }
+
     },
     production: {
         client: 'pg',
         connection: {
-            connectionString: databaseUrl,
-            ssl: false
+            connectionString: databaseUrl
         },
+        ssl: {
+            rejectUnauthorized: false
+        }
     }
 }
