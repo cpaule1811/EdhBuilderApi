@@ -34,6 +34,9 @@ const reset = require('./controllers/updatePassword')
 const forgot = require('./controllers/forgotpassword')
 const jsonFile = require('./controllers/jsonfile')
 
+const dotenv = require('dotenv');
+dotenv.config();
+
 const db = knex({
     client: 'pg',
     connection: process.env.DATABASE_URL,
@@ -49,7 +52,10 @@ app.use(express.json({limit: "2mb"}))
 app.use(cors({ origin: [process.env.ALLOWED_ORIGIN] }))
 app.use(compression())
 
+console.log(process.env.ALLOWED_ORIGIN)
+
 //site data get requests
+app.get('/', (req, res) => res.json("hello world"))
 app.get('/requestdeck/:id/:userid', auth.requireAuthDecklist, (req, res) => { getdeck.handleGetdeck(req, res, db) })
 app.get('/deckspub/:pn/:userid', (req, res) => { recentDecks.handleMostRecent(req, res, db) })
 app.get('/deckspriv/:pn/:userid', (req, res) => { recentDecks.handleMostRecentPriv(req, res, db) })
