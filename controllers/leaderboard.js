@@ -14,6 +14,12 @@ const handleLeaderboard = (req, res, db) => {
          .then(dataMonths => {
              res.json([data, dataMonths.rows])
          })
+         .catch(err => {
+            console.log("err:", err)
+         })
+     })
+     .catch(err => {
+        console.log("err:", err)
      })
 }
 

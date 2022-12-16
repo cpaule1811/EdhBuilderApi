@@ -1,0 +1,27 @@
+version: "3.9"
+services:
+  redis:
+    image: redis:6.0.9-alpine
+    container_name: redis
+    ports:
+      - 6379:6379
+    volumes:
+      - ./data/redis.conf:/usr/local/etc/redis/redis.conf
+    command: redis-server /usr/local/etc/redis/redis.conf
+    networks:
+      - database-network
+  postgres:
+    image: postgres:13.1-alpine
+    container_name: postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - ./data/create-tables.sql:/docker-entrypoint-initdb.d/create-tables.sql
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    networks:
+      - database-network
+
+networks:
+  database-network:
