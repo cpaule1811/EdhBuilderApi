@@ -1,9 +1,9 @@
 const handleSideboard = (req, res, db) => { 
     const { cardName, deckID, status } = req.body;
-    db('cards').returning('*').update({cardStatus: status}).where({cardName: cardName, deckID: deckID})
+    db('cards').returning('*').update({cardStatus: status}).where({cardName: cardName, deck_id: deckID})
     .then(response => { 
-        const { cardName, deckID } = response[0]
-        db('entrys').join('cards', 'cards.cardName', '=', 'entrys.cardName').select("*").where({ "entrys.cardName": cardName, deckID: deckID })
+        const { cardName } = response[0]
+        db('entrys').join('cards', 'cards.cardName', '=', 'entrys.cardName').select("*").where({ "entrys.cardName": cardName, deck_id: deckID })
         .then(card => {
             res.json(card[0])
         })

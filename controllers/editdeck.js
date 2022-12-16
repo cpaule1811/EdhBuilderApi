@@ -5,7 +5,7 @@ const handleEditdeck = (req, res, db ) => {
     .then(commanderData => {
                 const { cardName, imageUrl, imageUrl2, cardArt, color, artist } = commanderData[0]
                 db('decks')
-                .where("deckID", deckID)
+                .where("id", deckID)
                 .update({ 
                     deckName: deckName,
                     commander: cardName,
@@ -19,7 +19,7 @@ const handleEditdeck = (req, res, db ) => {
                     artist: artist,
                 })
                 .returning('*')
-                .then(resp => {res.json(resp[0].deckID)})
+                .then(resp => {res.json(resp[0].id)})
     })
         .catch(err => res.status(400).json(err))  
 }

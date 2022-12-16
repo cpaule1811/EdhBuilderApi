@@ -4,13 +4,13 @@ const handleGetdeck = (req, res, db) => {
      let userRating = 0;
      db('ratings')
     .select('rating')
-    .where({deckID: id, userID: userid })
+    .where({deck_id: id, user_id: userid })
     .then(data => userRating = data.length && data[0].rating)
             db('decks')
-            .leftJoin('cards', 'decks.deckID', '=', 'cards.deckID')
+            .leftJoin('cards', 'decks.id', '=', 'cards.deck_id')
             .leftJoin('entrys', 'cards.cardName', '=', 'entrys.cardName')
-            .select([{deckId: 'decks.deckID'}, 'decks.color as commanderColor', 'decks.cardArt as commCardArt', '*'])
-            .where('decks.deckID', '=', id)
+            .select([{id: 'decks.id'}, 'decks.color as commanderColor', 'decks.cardArt as commCardArt', '*'])
+            .where('decks.id', '=', id)
             .then(decklist => { 
                     const deckdetails = { 
                         deckID: decklist[0].deckId,
@@ -19,7 +19,7 @@ const handleGetdeck = (req, res, db) => {
                         cardArt: decklist[0].commCardArt,
                         description: decklist[0].deckDescription,
                         cardImage: decklist[0].cardImage,
-                        userID: decklist[0].userID,
+                        userID: decklist[0].user_id,
                         cardImage2: decklist[0].cardImage2, 
                         color: decklist[0].commanderColor, 
                         username: decklist[0].username,
@@ -32,7 +32,7 @@ const handleGetdeck = (req, res, db) => {
                     const deck = decklist.map(item => { 
                         return {
                         cardName: item.cardName,
-                        deckID: item.deckID,
+                        deckID: item.deckId,
                         quantity: item.quantity, 
                         cardStatus: item.cardStatus,
                         type: item.type, 
@@ -46,7 +46,7 @@ const handleGetdeck = (req, res, db) => {
                         producedMana: item.producedMana
                         }
                     })
-                    const authorized = decklist[0].userID === userAttempt 
+                    const authorized = decklist[0].user_id === userAttempt 
                     if (!deck[0].cardName) { 
                         deck.pop()
                     }

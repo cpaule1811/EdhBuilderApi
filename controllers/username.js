@@ -2,7 +2,7 @@
 
 const handleUsername = (req, res, db) => { 
     const { userId, username, profile } = req.body
-    db("users").where("userID", userId)
+    db("users").where("id", userId)
     .update({
         username: username,
         profile: profile

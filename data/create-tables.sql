@@ -1,69 +1,81 @@
-CREATE TABLE public.users
+CREATE TABLE login
 (
-    "userID" integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
-    username character varying(40) COLLATE pg_catalog."default",
-    email text COLLATE pg_catalog."default" NOT NULL,
-    "decksNum" integer,
+    login_id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
+    hash character varying(100) NOT NULL,
+    email text NOT NULL,
+    CONSTRAINT login_pkey PRIMARY KEY (login_id),
+    CONSTRAINT login_email_key UNIQUE (email)
+);
+
+CREATE TABLE users
+(
+    id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
+    username character varying(40),
+    email text NOT NULL,
+    decksNum integer,
     joined timestamp without time zone,
-    profile text COLLATE pg_catalog."default",
-    CONSTRAINT users_pkey PRIMARY KEY ("userID"),
+    profile text,
+    CONSTRAINT users_pkey PRIMARY KEY (id),
     CONSTRAINT uniqueusername UNIQUE (username),
     CONSTRAINT users_email_key UNIQUE (email)
-)
+);
 
-TABLESPACE pg_default;
-
-ALTER TABLE public.users
-    OWNER to postgres;
-
-CREATE TABLE public.ratings
+CREATE TABLE decks 
 (
-    "deckID" integer NOT NULL,
+    id integer NOT NULL
+        GENERATED ALWAYS AS IDENTITY
+        ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
+    user_id integer NOT NULL,
+    name character varying(40) NOT NULL,
+    commander character varying(40) NOT NULL,
+    created timestamp without time zone,
+    partner character varying(40),
+    description text,
+    imageUrl character varying(100),
+    imageUrl2 character varying(100),
+    partnerImageUrl character varying(100),
+    color character varying(40),
+    artist character varying(40),
+    averageRating numeric,
+    CONSTRAINT decks_pkey PRIMARY KEY (id),
+    CONSTRAINT users_fkey FOREIGN KEY (user_id) REFERENCES users (id)
+);
+
+CREATE TABLE ratings
+(
+    deck_id integer NOT NULL,
     rating numeric NOT NULL,
-    "userID" integer NOT NULL,
-    CONSTRAINT ratings_pkey PRIMARY KEY ("userID", "deckID")
-)
+    user_id integer NOT NULL,
+    CONSTRAINT ratings_pkey PRIMARY KEY (user_id, deck_id),
+    CONSTRAINT decks_fkey FOREIGN KEY (deck_id) REFERENCES decks (id),
+    CONSTRAINT users_fkey FOREIGN KEY (user_id) REFERENCES users (id)
+);
 
-TABLESPACE pg_default;
-
-ALTER TABLE public.ratings
-    OWNER to postgres;
-
-CREATE TABLE public.login
+CREATE TABLE cards
 (
-    "loginID" integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
-    hash character varying(100) COLLATE pg_catalog."default" NOT NULL,
-    email text COLLATE pg_catalog."default" NOT NULL,
-    CONSTRAINT login_pkey PRIMARY KEY ("loginID"),
-    CONSTRAINT login_email_key UNIQUE (email)
-)
+    cardName text NOT NULL, 
+    deck_id integer NOT NULL,
+    quantity integer NOT NULL, 
+    cardStatus character varying(40),
+    CONSTRAINT cards_pkey PRIMARY KEY (cardName, deck_id)
+);
 
-TABLESPACE pg_default;
-
-ALTER TABLE public.login
-    OWNER to postgres;
-
-CREATE TABLE public.entrys
+CREATE TABLE entrys
 (
-    "cardName" text COLLATE pg_catalog."default" NOT NULL,
-    type character varying COLLATE pg_catalog."default",
+    cardName text NOT NULL,
+    type character varying,
     price numeric,
     cmc numeric,
-    modal character varying COLLATE pg_catalog."default",
-    "imageUrl" character varying COLLATE pg_catalog."default",
-    "imageUrl2" character varying COLLATE pg_catalog."default",
-    color character varying COLLATE pg_catalog."default",
-    "producedMana" character varying COLLATE pg_catalog."default",
-    legal character varying COLLATE pg_catalog."default",
-    mana character varying COLLATE pg_catalog."default",
-    "cardArt" character varying COLLATE pg_catalog."default",
-    oracle_text text COLLATE pg_catalog."default",
-    "isPartner" boolean,
-    artist character varying COLLATE pg_catalog."default",
-    CONSTRAINT entrys_pkey PRIMARY KEY ("cardName")
-)
-
-TABLESPACE pg_default;
-
-ALTER TABLE public.entrys
-    OWNER to postgres;
+    modal character varying,
+    imageUrl character varying,
+    imageUrl2 character varying,
+    color character varying,
+    producedMana character varying,
+    legal character varying,
+    mana character varying,
+    cardArt character varying,
+    oracle_text text,
+    isPartner boolean,
+    artist character varying,
+    CONSTRAINT entrys_pkey PRIMARY KEY (cardName)
+);

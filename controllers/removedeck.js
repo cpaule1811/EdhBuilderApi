@@ -3,10 +3,10 @@ const handleRemovedeck = (req, res, db) => {
     db.transaction(trx => { 
         trx.del()
         .from('decks')
-        .where('deckID', deckID)
-        .returning('userID')
+        .where('id', deckID)
+        .returning('user_id')
         .then(user => { 
-            return db('users').where('userID','=', user[0]).decrement('decksNum', 1)
+            return db('users').where('id','=', user[0]).decrement('decksNum', 1)
         })
         .then(response => { 
             res.json(response)

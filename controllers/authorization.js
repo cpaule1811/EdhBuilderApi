@@ -38,7 +38,7 @@ const requireAuthEdit = (db) => (req, res, next) => {
         if(err || !reply) { 
             return res.status(401).json('unauthorized')
         }
-        db('decks').select('userID').where('deckID', deckID)
+        db('decks').select('user_id').where('id', deckID)
         .then(resp => {
            if(resp[0].userID === Number(reply)){
              return next()

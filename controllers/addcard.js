@@ -3,15 +3,15 @@ const handleAddcard = (req, res, db) => {
     db('cards').insert({ 
         cardName: cardName, 
         quantity: quantity, 
-        deckID: deckID,
+        deck_id: deckID,
         cardStatus: "main"
     })
-    .onConflict(['cardName', 'deckID'])
+    .onConflict(['cardName', 'deck_id'])
     .merge({ quantity: quantity })
     .returning(['cardName', 'deckID'])
     .then(addedCard => {
         const { cardName, deckID } = addedCard[0]
-        db('entrys').join('cards', 'cards.cardName', '=', 'entrys.cardName').select("*").where({ "entrys.cardName": cardName, deckID: deckID })
+        db('entrys').join('cards', 'cards.cardName', '=', 'entrys.cardName').select("*").where({ "entrys.cardName": cardName, deck_id: deckID })
         .then(card => {
             res.json({card: card[0], resp: true})
         })

@@ -1,6 +1,6 @@
 const handleDecklist = (req, res, db) => { 
     const { deckID } = req.params; 
-    db.select('*').from("decks").join('cards', 'cards.deckID', 'decks.deckID').where('cards.deckID', deckID)
+    db.select('*').from("decks").join('cards', 'cards.deck_id', 'decks.id').where('cards.deck_id', deckID)
     .then(decklist => {
         res.json(decklist);
     })

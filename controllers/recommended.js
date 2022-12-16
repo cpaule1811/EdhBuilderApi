@@ -4,7 +4,7 @@ const handleRecommended = (req, res, db) => {
     .select(["cards.cardName", "price", "type", "cmc", "imageUrl", "modal", "legal", "imageUrl2", "entrys.color", "producedMana", "mana"])
     .count("cards.cardName")
     .join('entrys', 'entrys.cardName', '=', 'cards.cardName' )
-    .join('decks', 'decks.deckID', '=', 'cards.deckID')
+    .join('decks', 'decks.id', '=', 'cards.deck_id')
     .where(partner !== 'null' ? {commander: commander, partner: partner} : {commander: commander})
     .groupBy(["cards.cardName", "price", "type", "cmc", "imageUrl", "modal", "legal", "imageUrl2", "entrys.color", "producedMana", "mana"])
     .orderBy('count', 'desc')

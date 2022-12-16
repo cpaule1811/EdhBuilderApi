@@ -3,19 +3,19 @@ const handleAddRating = (req, res, db) => {
     
     db.transaction((trx) => {
         db('ratings').insert({ 
-            userID: userID, 
-            deckID: deckID, 
+            user_id: userID, 
+            deck_id: deckID, 
             rating: rating
         })
-        .onConflict(['userID', 'deckID'])
+        .onConflict(['user_id', 'deck_id'])
         .merge({ rating: rating })
-        .returning('deckID')
+        .returning('deck_id')
         .then(rating => {
             return db('ratings')
             .avg('rating as avg')
-            .where('deckID', '=', rating[0])
+            .where('deck_id', '=', rating[0])
             .then(avg => { 
-                return db('decks').update({avgRating: Number(avg[0].avg).toFixed(2)}).where('deckID', '=', rating[0])
+                return db('decks').update({avgRating: Number(avg[0].avg).toFixed(2)}).where('deck_id', '=', rating[0])
             })
           })
           .then(trx.commit)

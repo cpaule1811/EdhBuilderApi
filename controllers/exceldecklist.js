@@ -11,13 +11,13 @@ const handleExceldecklist = (req, res, db) => {
         const cardsToAdd = resp.rows.map(item => { 
             return { 
                 cardName: item.cardName, 
-                deckID: deckID, 
+                deck_id: deckID, 
                 quantity: 1, 
                 cardStatus: "main"
             }})
             db('cards').insert(cardsToAdd)
             .returning('*')
-            .onConflict(['cardName', 'deckID'])
+            .onConflict(['cardName', 'deck_id'])
             .merge()
             .then(() => { res.json("success") })
             .catch(() => { res.status(400).json('could not add cards from excel') });

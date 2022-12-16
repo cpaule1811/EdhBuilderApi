@@ -12,10 +12,10 @@ const { OAuth2Client } = require('google-auth-library')
 const googleClient = new OAuth2Client(process.env.GOOGLE_API_KEY)
 
 const handleSigninGoogle = async (req, res, db, token) => {
-    const ticket = await googleClient.verifyIdToken({
-        idToken: token,
-        audience: process.env.CLIENT_ID
-    });
+    const ticket = await googleClient.verifyIdToken(
+        process.env.GOOGLE_CLIENT_ID,
+        process.env.GOOGLE_SECRET
+    );
     const { email } = ticket.getPayload();    
     const [user] = await db("users")
     .insert({

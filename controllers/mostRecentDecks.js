@@ -1,8 +1,8 @@
 const handleMostRecent = (req, res, db) => { 
     const { pn } = req.params  
     
-    db('users').select([{userID: 'users.userID'}, {deckID: 'decks.deckID'}, 'username', 'avgRating', 'commander', 'deckName', 'deckDescription', 'partner', 'cardArt', 'cardImage', 'cardImagePartner', 'cardImage2', 'color', 'artist'])
-    .rightJoin('decks', 'users.userID', '=', 'decks.userID')
+    db('users').select([{userID: 'users.id'}, {deckID: 'decks.id'}, 'username', 'avgRating', 'commander', 'deckName', 'deckDescription', 'partner', 'cardArt', 'cardImage', 'cardImagePartner', 'cardImage2', 'color', 'artist'])
+    .rightJoin('decks', 'users.id', '=', 'decks.user_id')
     .orderBy('decks.created', 'desc')
     .then(response => res.json(response.slice(8*pn-8, 8*pn)))
     .catch(err => {res.status(400).json('unable to get decks')})
@@ -10,7 +10,7 @@ const handleMostRecent = (req, res, db) => {
 
 const getDecksLength = (req, res, db) => {
     db('decks')
-    .count('deckID')
+    .count('id')
     .then(response => res.json(response[0]))
     .catch(err => res.status(400).json('unable to get number of decks'))
 }
@@ -18,10 +18,10 @@ const getDecksLength = (req, res, db) => {
 const handleMostRecentPriv = (req, res, db) => { 
     const { pn, userid } = req.params
         
-    db('users').select([{userID: 'users.userID'}, {deckID: 'decks.deckID'}, 'username','avgRating', 'commander', 'deckName', 'deckDescription', 'partner', 'cardArt', 'cardImage', 'cardImagePartner', 'cardImage2', 'color', 'artist'])
-    .rightJoin('decks', 'users.userID', '=', 'decks.userID')
+    db('users').select([{userID: 'users.id'}, {deckID: 'decks.id'}, 'username','avgRating', 'commander', 'deckName', 'deckDescription', 'partner', 'cardArt', 'cardImage', 'cardImagePartner', 'cardImage2', 'color', 'artist'])
+    .rightJoin('decks', 'users.id', '=', 'decks.user_id')
     .orderBy('decks.created', 'desc')
-    .where('decks.userID', '=', userid)
+    .where('decks.user_id', '=', userid)
     .then(response => res.json(response.slice(8*pn-8, 8*pn)) )
     .catch(err => {res.status(400).json('unable to get decks')})
 }
@@ -29,8 +29,8 @@ const handleMostRecentPriv = (req, res, db) => {
 const getDecksLengthPriv = (req, res, db) => {
     const { userid } = req.params
     db('decks')
-    .count('deckID')
-    .where('userID', userid)
+    .count('deck_id')
+    .where('user_id', userid)
     .then(response => res.json(response[0]))
     .catch(err => res.status(400).json('unable to get number of decks'))
 }
