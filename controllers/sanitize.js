@@ -1,15 +1,15 @@
 var sanitizer = require('sanitizer');
 
 const sanitizeData = (req, res, next) => {
-    if(req.body) { 
+    if (req.body) {
         for (const key in req.body) {
             req.body[key] = sanitizer.sanitize(req.body[key])
         }
     }
-    if(req.query) { 
+    if (req.query) {
         req.query.name = sanitizer.sanitize(req.query.name)
     }
-    if(req.params) { 
+    if (req.params) {
         for (const key in req.params) {
             req.params[key] = sanitizer.sanitize(req.params[key])
         }
@@ -17,6 +17,6 @@ const sanitizeData = (req, res, next) => {
     next()
 }
 
-module.exports = { 
+module.exports = {
     sanitizeData: sanitizeData
 }

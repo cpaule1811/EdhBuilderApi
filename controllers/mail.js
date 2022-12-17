@@ -1,13 +1,13 @@
-const handleMail = (req, res, nodemailer) => { 
-     const { name, email, subject, message } = req.body
-     if (!name || !email || !subject || !message){ 
+const handleMail = (req, res, nodemailer) => {
+    const { name, email, subject, message } = req.body
+    if (!name || !email || !subject || !message) {
         return res.json("Please fill out all fields")
-     }
-      let transporter = nodemailer.createTransport({ 
-         host: 'smtp.gmail.com',
-         port: 465,
-         secure:true,
-         auth: {
+    }
+    let transporter = nodemailer.createTransport({
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
+        auth: {
             type: 'OAuth2',
             user: process.env.GOOGLE_EMAIL,
             clientId: process.env.GOOGLE_CLIENT_ID,
@@ -17,22 +17,22 @@ const handleMail = (req, res, nodemailer) => {
             expires: 1484314697598
         }
     })
-    const mail = { 
+    const mail = {
         from: `"${name}" <${email}>`,
-            to: process.env.CONTACT_TO,
-            subject: subject,
-            text: message + `\n\nregards, ${name} ${email}`,
+        to: process.env.CONTACT_TO,
+        subject: subject,
+        text: message + `\n\nregards, ${name} ${email}`,
     }
     transporter.sendMail(mail, (err, info) => {
-        if (err) { 
-         res.status(err).json("Message failed")
+        if (err) {
+            res.status(err).json("Message failed")
         }
-        else { 
+        else {
             res.json("Message successfully sent!")
         }
-    })  
+    })
 }
 
-module.exports = { 
+module.exports = {
     handleMail: handleMail
 }

@@ -12,7 +12,6 @@ CREATE TABLE users
     id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
     username character varying(40),
     email text NOT NULL,
-    decksNum integer,
     joined timestamp without time zone,
     profile text,
     CONSTRAINT users_pkey PRIMARY KEY (id),
@@ -31,12 +30,13 @@ CREATE TABLE decks
     created timestamp without time zone,
     partner character varying(40),
     description text,
-    imageUrl character varying(100),
-    imageUrl2 character varying(100),
-    partnerImageUrl character varying(100),
+    image_url character varying(100),
+    image_url_2 character varying(100),
+    partner_image_url character varying(100),
+    card_art character varying(100),
     color character varying(40),
     artist character varying(40),
-    averageRating numeric,
+    avg_rating numeric,
     CONSTRAINT decks_pkey PRIMARY KEY (id),
     CONSTRAINT users_fkey FOREIGN KEY (user_id) REFERENCES users (id)
 );
@@ -53,29 +53,29 @@ CREATE TABLE ratings
 
 CREATE TABLE cards
 (
-    cardName text NOT NULL, 
+    card_name text NOT NULL, 
     deck_id integer NOT NULL,
     quantity integer NOT NULL, 
-    cardStatus character varying(40),
-    CONSTRAINT cards_pkey PRIMARY KEY (cardName, deck_id)
+    card_status character varying(40),
+    CONSTRAINT cards_pkey PRIMARY KEY (card_name, deck_id)
 );
 
 CREATE TABLE entrys
 (
-    cardName text NOT NULL,
+    card_name text NOT NULL,
     type character varying,
     price numeric,
     cmc numeric,
     modal character varying,
-    imageUrl character varying,
-    imageUrl2 character varying,
+    image_url character varying,
+    image_url2 character varying,
     color character varying,
-    producedMana character varying,
+    produced_mana character varying,
     legal character varying,
     mana character varying,
-    cardArt character varying,
+    card_art character varying,
     oracle_text text,
-    isPartner boolean,
+    is_partner boolean,
     artist character varying,
-    CONSTRAINT entrys_pkey PRIMARY KEY (cardName)
+    CONSTRAINT entrys_pkey PRIMARY KEY (card_name)
 );

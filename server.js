@@ -42,12 +42,12 @@ const knexConfig = require('./config/knexConfig.js')[process.env.ENVIRONMENT]
 const db = knex({ ...knexConfig })
 
 app.use(fileUpload({
-    limits: {fileSize: 3 * 1024 * 1024},
+    limits: { fileSize: 3 * 1024 * 1024 },
 }));
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: false }));
 app.use(helmet())
-app.use(express.json({limit: "2mb"}))
-app.use(cors({origin: [process.env.ALLOWED_ORIGIN]}))
+app.use(express.json({ limit: "2mb" }))
+app.use(cors())
 app.use(compression())
 
 //site data get requests
