@@ -1,7 +1,7 @@
 CREATE TABLE login
 (
     login_id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
-    hash character varying(100) NOT NULL,
+    'hash' character varying(100) NOT NULL,
     email text NOT NULL,
     CONSTRAINT login_pkey PRIMARY KEY (login_id),
     CONSTRAINT login_email_key UNIQUE (email)
@@ -11,9 +11,9 @@ CREATE TABLE users
 (
     id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
     username character varying(40),
-    email text NOT NULL,
+    email character varying(40) NOT NULL,
     joined timestamp without time zone,
-    profile text,
+    'profile' character varying,
     CONSTRAINT users_pkey PRIMARY KEY (id),
     CONSTRAINT uniqueusername UNIQUE (username),
     CONSTRAINT users_email_key UNIQUE (email)
