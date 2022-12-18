@@ -45,7 +45,6 @@ app.use(fileUpload({
     limits: { fileSize: 3 * 1024 * 1024 },
 }));
 app.use(express.urlencoded({ extended: false }));
-app.use(helmet())
 app.use(express.json({ limit: "2mb" }))
 app.use(cors())
 app.use(compression())
