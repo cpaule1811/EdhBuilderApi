@@ -33,6 +33,8 @@ const reset = require('./controllers/updatePassword')
 const forgot = require('./controllers/forgotpassword')
 const jsonFile = require('./controllers/jsonfile')
 
+const { getDownloadUrl } = require('./services/UploadCardEntries')
+
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -135,4 +137,5 @@ app.post('/send', sanitize.sanitizeData, (req, res) => {
 
 app.listen(process.env.PORT, () => {
     console.log('listening to server port:' + process.env.PORT)
+    getDownloadUrl();
 })
