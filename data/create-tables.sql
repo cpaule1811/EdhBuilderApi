@@ -21,9 +21,7 @@ CREATE TABLE users
 
 CREATE TABLE decks 
 (
-    id integer NOT NULL
-        GENERATED ALWAYS AS IDENTITY
-        ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
+    id integer NOT NULLGENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
     user_id integer NOT NULL,
     name character varying(40) NOT NULL,
     commander character varying(40) NOT NULL,
