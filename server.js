@@ -33,7 +33,7 @@ const reset = require('./controllers/updatePassword')
 const forgot = require('./controllers/forgotpassword')
 const jsonFile = require('./controllers/jsonfile')
 
-const { getDownloadUrl } = require('./services/UploadCardEntries')
+const { getDownloadUrl, checkCardsNeedsUpdate, getBulkDataFile, uploadCardEntries } = require('./services/UploadCardEntries')
 
 const dotenv = require('dotenv');
 dotenv.config();
@@ -137,5 +137,18 @@ app.post('/send', sanitize.sanitizeData, (req, res) => {
 
 app.listen(process.env.PORT, () => {
     console.log('listening to server port:' + process.env.PORT)
-    getDownloadUrl();
+
+    const cardsNeedUpdate = checkCardsNeedsUpdate()
+    console.log(cardsNeedUpdate)
+    if (cardsNeedUpdate) {
+        getDownloadUrl().then((url) => {
+            console.log("uploading card entrys")
+            getBulkDataFile(url)
+            uploadCardEntries(db).then(() => {
+                console.log('upsert successful')
+            }).catch(error => {
+                console.error(`Upsert failed: ${error}`)
+            })
+        })
+    }
 })
