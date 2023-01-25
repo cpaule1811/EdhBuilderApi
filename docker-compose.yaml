@@ -16,10 +16,12 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - ./data/create-tables.sql:/docker-entrypoint-initdb.d/create-tables.sql
+      - ./data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: edhbuilder
+      PGDATA: /var/lib/postgresql/data/pgdata
     networks:
       - database-network
 
