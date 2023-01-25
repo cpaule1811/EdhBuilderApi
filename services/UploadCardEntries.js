@@ -2,6 +2,7 @@ const https = require('https');
 const fs = require('fs');
 const path = require('path');
 const { prismaClient } = require('../prismaClient');
+const { checkIsDualFacedCard, checkCardIsPartner, combineColourIdentityArrays, combineManaColoursArrays, filterIllegalCards } = require("./EntryFormatter.js");
 
 function checkCardsNeedsUpdate() {
     const path = "./data/cards.json";
@@ -10,10 +11,11 @@ function checkCardsNeedsUpdate() {
     if (!fileExists)
         return true;
 
-    const fileStats = fs.statSync
+    const fileStats = fs.statSync(path)
     const fileAge = fileStats.mtime
     const currentDate = new Date();
-    const fileAgeInDays = (currentDate - fileAge) / (1000 * 3600 * 24);
+    const fileAgeInMilliseconds = (currentDate - fileAge);
+    const fileAgeInDays = fileAgeInMilliseconds / (1000 * 3600 * 24);
 
     if (fileAgeInDays > 1) {
         return true;
@@ -39,6 +41,11 @@ async function getDownloadUrl() {
     });
 }
 
+function removeBulkDataFile() {
+    const path = "./data/cards.json";
+    fs.rmSync(path, { force: true });
+}
+
 async function getBulkDataFile(fileDownloadUri) {
     return new Promise((resolve) => {
         https.get(fileDownloadUri, (res) => {
@@ -57,63 +64,6 @@ async function getBulkDataFile(fileDownloadUri) {
     });
 }
 
-function checkCardIsPartner(card) {
-    if (card.keywords.includes("Partner"))
-        return true;
-
-    if (card.oracle_text)
-        if (card.oracle_text.includes("Partner with "))
-            return true;
-
-    return false;
-}
-
-function checkIsLegalCardType(layout) {
-    const layoutsToFilter = ["art_series", "double_faced_token", "token", "vanguard", "emblem", "adventrue", "scheme", "planar"]
-
-    return !layoutsToFilter.includes(layout);
-}
-
-function checkIsLegalBorder(border) {
-    return border !== "silver";
-}
-
-function cleanJsonCards(jsonCards) {
-    return jsonCards.filter(card =>
-        checkIsLegalCardType(card.layout) &&
-        checkIsLegalBorder(card.border_color));
-}
-
-const dualFacedLayouts = [
-    "transform",
-    "modal_dfc",
-    "flip"
-]
-
-function checkIsDualFacedCard(layout) {
-    return dualFacedLayouts.includes(layout);
-}
-
-function combineColoursArrays(colours) {
-    return [...new Set(colours)];
-}
-
-function combineManaColoursArrays(cardFaces) {
-    let colours = [];
-    cardFaces.forEach(face => {
-        colours = colours.concat(face.colors);
-    })
-    return combineColoursArrays(colours)
-}
-
-function combineColourIdentityArrays(cardFaces) {
-    let colourIdentity = [];
-    cardFaces.forEach(face => {
-        colourIdentity = colourIdentity.concat(face.color_identity);
-    })
-    return combineColoursArrays(colourIdentity)
-}
-
 function getCardsAsJson() {
     const cardsPath = path.resolve(__dirname, '../data/cards.json');
     const cardsAsJson = fs.readFileSync(cardsPath);
@@ -122,15 +72,18 @@ function getCardsAsJson() {
 }
 
 function convertJsonCardsToEntries(jsonCards) {
-    const cleanedJsonCards = cleanJsonCards(jsonCards);
-
-    const entries = cleanedJsonCards.map(card => {
+    const entries = jsonCards.map(card => {
         const isDualFacedCard = checkIsDualFacedCard(card.layout);
         const colours = isDualFacedCard ? combineManaColoursArrays(card.card_faces) : card.colors;
         const colourIdentity = isDualFacedCard ? combineColourIdentityArrays(card.card_faces) : card.color_identity;
-        const imageUrl = isDualFacedCard ? card.card_faces[0].image_uris?.normal ?? "nothing" : card.image_uris?.normal ?? "nothing";
-        const imageUrl2 = isDualFacedCard ? card.card_faces[1].image_uris?.normal ?? "nothing" : null;
-        const cardArt = isDualFacedCard ? card.card_faces[0].image_uris?.art_crop ?? "nothing" : card.image_uris?.art_crop ?? "nothing";
+        const imageUrl = isDualFacedCard ? card.card_faces[0].image_uris.normal : card.image_uris.normal;
+        const imageUrl2 = isDualFacedCard ? card.card_faces[1].image_uris?.normal : null;
+        const cardArt = isDualFacedCard ? card.card_faces[0].image_uris?.art_crop : card.image_uris?.art_crop;
+        const type = isDualFacedCard ? card.card_faces.map(face => face.type_line).join(" // ") : card.type_line;
+        const manaCost = isDualFacedCard ? card.card_faces.map(face => face.mana_cost).join(" // ") : card.mana_cost;
+        const oracleText = isDualFacedCard ? card.card_faces.map(face => face.oracle_text).join(" // ") : card.oracle_text;
+        const artist = isDualFacedCard ? card.card_faces[0].artist : card.artist;
+        const isLegal = card.legalities.commander === "legal" ? true : false;
         let price = 0;
 
         if (card.prices.usd) {
@@ -139,29 +92,30 @@ function convertJsonCardsToEntries(jsonCards) {
 
         return {
             cardName: card.name,
-            type: card.type_line ?? card.card_faces[0].type_line + " // " + card.card_faces[1].type_line,
+            type,
             price,
             cmc: card.cmc,
             modal: card.layout,
-            imageUrl: imageUrl,
-            imageUrl2: imageUrl2,
-            color: colours.join(","),
+            imageUrl,
+            imageUrl2,
+            colour: colours.join(","),
             producedMana: colourIdentity.join(","),
-            legal: card.legalities.commander,
-            mana: card.mana_cost ?? card.card_faces[0].mana_cost + " // " + card.card_faces[1].mana_cost,
-            cardArt: cardArt,
-            oracleText: card.oracle_text ?? card.card_faces[0].oracle_text + " // " + card.card_faces[1].oracle_text,
+            isLegal,
+            manaCost,
+            cardArt,
+            oracleText,
             isPartner: checkCardIsPartner(card),
-            artist: card.artist ?? card.card_faces[0].artist
+            artist,
         }
     });
 
     return entries;
 }
 
-async function uploadCardEntries(db) {
+async function uploadCardEntries() {
     const jsonCards = getCardsAsJson();
-    const entries = convertJsonCardsToEntries(jsonCards);
+    const cleanedJsonCards = filterIllegalCards(jsonCards);
+    const entries = convertJsonCardsToEntries(cleanedJsonCards);
 
     try {
         const result = await prismaClient.$transaction(
@@ -171,10 +125,21 @@ async function uploadCardEntries(db) {
                 create: entry
             }))
         );
-
-        console.log("update result: ", result);
+        console.log("Entries uploaded: ", result.length)
     } catch (err) {
-        console.log(err);
+        console.log("Error uploading entries: ", err)
+    }
+}
+
+async function updateEntries() {
+    const url = await getDownloadUrl();
+    await getBulkDataFile(url);
+
+    try {
+        const result = await uploadCardEntries();
+        console.log("Enries updated: ", result)
+    } catch {
+        console.log("Error updating entries")
     }
 }
 
@@ -183,13 +148,7 @@ module.exports = {
     checkCardsNeedsUpdate,
     getBulkDataFile,
     uploadCardEntries,
-    checkCardIsPartner,
-    checkIsLegalCardType,
-    checkIsLegalBorder,
-    cleanJsonCards,
-    checkIsDualFacedCard,
-    combineColoursArrays,
-    combineManaColoursArrays,
-    combineColourIdentityArrays,
-    filterDuplicateCardNames
+    convertJsonCardsToEntries,
+    removeBulkDataFile,
+    updateEntries
 }

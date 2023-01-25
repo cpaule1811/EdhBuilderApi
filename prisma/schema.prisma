@@ -66,10 +66,10 @@ model Entry {
     modal        String?
     imageUrl     String?
     imageUrl2    String?
-    color        String?
+    colour       String?
+    manaCost     String?
     producedMana String?
-    legal        String?
-    mana         String?
+    isLegal      Boolean?
     cardArt      String?
     oracleText   String?
     isPartner    Boolean?

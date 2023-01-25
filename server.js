@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 const nodemailer = require("nodemailer");
 const fileUpload = require("express-fileupload")
 const compression = require('compression')
+var cron = require('node-cron');
 
 const app = express()
 
@@ -33,7 +34,7 @@ const reset = require('./controllers/updatePassword')
 const forgot = require('./controllers/forgotpassword')
 const jsonFile = require('./controllers/jsonfile')
 
-const { getDownloadUrl, checkCardsNeedsUpdate, getBulkDataFile, uploadCardEntries } = require('./services/UploadCardEntries')
+const { checkCardsNeedsUpdate, updateEntries, removeBulkDataFile } = require('./services/UploadCardEntries')
 
 const dotenv = require('dotenv');
 dotenv.config();
@@ -135,22 +136,19 @@ app.post('/send', sanitize.sanitizeData, (req, res) => {
     mail.handleMail(req, res, nodemailer)
 })
 
-app.listen(process.env.PORT, () => {
+app.listen(process.env.PORT, async () => {
     console.log('listening to server port:' + process.env.PORT)
 
     const cardsNeedUpdate = checkCardsNeedsUpdate()
-    console.log(cardsNeedUpdate)
-    if (true) {
-        // getDownloadUrl().then((url) => {
-        //     console.log("uploading card entrys")
-        //     getBulkDataFile(url).then(() => {
-        console.log("download finished")
-        uploadCardEntries(db).then(() => {
-            console.log('upsert successful')
-        }).catch(error => {
-            console.error(`Upsert failed: ${error}`)
-        })
-        // })
-        // })
+    if (cardsNeedUpdate) {
+        removeBulkDataFile();
+        await updateEntries();
     }
+
+    const schedule1amDaily = "1 * * * *"
+    cron.schedule(schedule1amDaily, async () => {
+        console.log("test")
+        removeBulkDataFile();
+        await updateEntries();
+    });
 })

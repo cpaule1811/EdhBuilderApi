@@ -1,141 +1,115 @@
-const { checkCardIsPartner, checkIsLegalCardType, combineColoursArrays, combineColourIdentityArrays, combineManaColoursArrays, checkIsLegalBorder, cleanJsonCards, checkIsDualFacedCard } = require("./UploadCardEntries");
+const { convertJsonCardsToEntries } = require("./UploadCardEntries");
 
-test("checkIsDualFacedCard_whenCardIsDualFaced_ShouldReturnTrue", () => {
-    const layout = "transform";
+test("convertJsonCardsToEntries_whenGivenJsonCards_shouldReturnEntries", () => {
+    const jsonCards = [{
+        name: "Aether Hub",
+        layout: "normal",
+        border_color: "black",
+        mana_cost: "{T}",
+        cmc: 1,
+        type_line: "Land",
+        oracle_text: "({T}: Add {C}.)\r",
+        image_uris: {
+            normal: "https://img.scryfall.com/cards/normal/front/6/0/60b4b1b1-8b1f-4b1f-8c1f-8f8f8f8f8f8f.jpg?1562871001",
+            art_crop: "https://img.scryfall.com/cards/art_crop/front/6/0/60b4b1b1-8b1f-4b1f-8c1f-8f8f8f8f8f8f.jpg?1562871001",
+        }, artist: "Daarken",
+        legalities: {
+            commander: "legal",
+        },
+        colors: ["W"],
+        color_identity: ["W"],
+        prices: {
+            usd: "0.25",
+        },
+        keywords: [
+            "partner"
+        ]
+    }];
+    const expectedResult = [{
+        cardName: "Aether Hub",
+        type: "Land",
+        modal: "normal",
+        manaCost: "{T}",
+        cmc: 1,
+        oracleText: "({T}: Add {C}.)\r",
+        imageUrl: "https://img.scryfall.com/cards/normal/front/6/0/60b4b1b1-8b1f-4b1f-8c1f-8f8f8f8f8f8f.jpg?1562871001",
+        imageUrl2: null,
+        cardArt: "https://img.scryfall.com/cards/art_crop/front/6/0/60b4b1b1-8b1f-4b1f-8c1f-8f8f8f8f8f8f.jpg?1562871001",
+        artist: "Daarken",
+        isLegal: true,
+        isPartner: false,
+        price: 0.25,
+        producedMana: "W",
+        colour: "W",
+    }]
 
-    const result = checkIsDualFacedCard(layout);
+    const result = convertJsonCardsToEntries(jsonCards)
 
-    expect(result).toBe(true)
-});
-
-test("checkIsDualFacedCard_whenCardIsNotDualFaced_ShouldReturnFalse", () => {
-    const layout = "normal";
-
-    const result = checkIsDualFacedCard(layout);
-
-    expect(result).toBe(false)
-});
-
-test("checkCardIsPartner_whenCardHasPartnerKeyword_ShouldReturnTrue", () => {
-    const card = {
-        keywords: ["Partner"]
-    }
-
-    const result = checkCardIsPartner(card);
-
-    expect(result).toBe(true)
-});
-
-test("checkCardIsPartner_whenCardHasNoOracleText_ShouldReturnFalse", () => {
-    const card = {
-        keywords: [],
-    }
-
-    const result = checkCardIsPartner(card);
-
-    expect(result).toBe(false)
-});
-
-test("checkCardIsPartner_whenCardHasPartnerWithText_ShouldReturnTrue", () => {
-    const card = {
-        oracle_text: "Partner with ",
-        keywords: []
-    }
-
-    const result = checkCardIsPartner(card)
-
-    expect(result).toBe(true)
-});
-
-test("checkCardIsPartner_whenCardHasNeitherPartnerKeywordOrPartnerWithText_ShouldReturnFalse", () => {
-    const card = {
-        keywords: [],
-        oracle_text: ""
-    }
-
-    const result = checkCardIsPartner(card)
-
-    expect(result).toBe(false)
+    expect(result).toEqual(expectedResult)
 })
 
-test("checkIsLegalCardType_whenCardIsLegalCardType_ShouldReturnTrue", () => {
-    const layout = "normal"
+test("convertJsonCardsToEntries_whenGivenDualFacedJsonCard_shouldReturnEntries", () => {
+    const jsonCards = [{
+        name: "Aether Hub",
+        layout: "transform",
+        border_color: "black",
+        cmc: 1,
+        legalities: {
+            commander: "legal",
+        },
+        colors: ["W"],
+        color_identity: ["W"],
+        prices: {
+            usd: "0.25",
+        },
+        keywords: [],
+        card_faces: [
+            {
+                name: "Aether Hub",
+                mana_cost: "{T}",
+                type_line: "Land",
+                oracle_text: "({T}: Add {C}.)\r",
+                image_uris: {
+                    normal: "https://img.scryfall.com/cards/normal/front/6/0/60b4b1b1-8b1f-4b1f-8c1f-8f8f8f8f8f8f.jpg?1562871001",
+                    art_crop: "https://img.scryfall.com/cards/art_crop/front/6/0/60b4b1b1-8b1f-4b1f-8c1f-8f8f8f8f8f8f.jpg?1562871001",
+                },
+                artist: "Daarken",
+                colors: ["W"],
+            },
+            {
+                name: "Aether Hub",
+                mana_cost: "{T}",
+                type_line: "Land",
+                oracle_text: "({T}: Add {C}.)\r",
+                image_uris: {
+                    normal: "https://img.scryfall.com/cards/normal/front/6/0/60b4b1b1-8b1f-4b1f-8c1f-8f8f8f8f8f8f.jpg?1562871002",
+                    art_crop: "https://img.scryfall.com/cards/art_crop/front/6/0/60b4b1b1-8b1f-4b1f-8c1f-8f8f8f8f8f8f.jpg?1562871002",
+                },
+                artist: "Daarken",
+                colors: ["B"],
+            }
+        ]
+    }];
+    const expectedResult = [{
+        cardName: "Aether Hub",
+        manaCost: "{T} // {T}",
+        modal: "transform",
+        cmc: 1,
+        type: "Land // Land",
+        price: 0.25,
+        isLegal: true,
+        isPartner: false,
+        oracleText: "({T}: Add {C}.)\r // ({T}: Add {C}.)\r",
+        imageUrl: "https://img.scryfall.com/cards/normal/front/6/0/60b4b1b1-8b1f-4b1f-8c1f-8f8f8f8f8f8f.jpg?1562871001",
+        imageUrl2: "https://img.scryfall.com/cards/normal/front/6/0/60b4b1b1-8b1f-4b1f-8c1f-8f8f8f8f8f8f.jpg?1562871002",
+        cardArt: "https://img.scryfall.com/cards/art_crop/front/6/0/60b4b1b1-8b1f-4b1f-8c1f-8f8f8f8f8f8f.jpg?1562871001",
+        artist: "Daarken",
+        isLegal: true,
+        colour: "W,B",
+        producedMana: "",
+    }]
 
-    const result = checkIsLegalCardType(layout);
-
-    expect(result).toBe(true)
-});
-
-test("checkIsLegalCardType_whenCardIsNotLegalCardType_ShouldReturnFalse", () => {
-    const layout = "token"
-
-    const result = checkIsLegalCardType(layout);
-
-    expect(result).toBe(false)
-});
-
-test("checkIsLegalBorder_whenCardIsLegalBorder_ShouldReturnTrue", () => {
-    const borderColour = "black";
-
-    const result = checkIsLegalBorder(borderColour);
-
-    expect(result).toBe(true)
-});
-
-test("checkIsLegalBorder_whenCardIsNotLegalBorder_ShouldReturnFalse", () => {
-    const borderColour = "silver";
-
-    const result = checkIsLegalBorder(borderColour);
-
-    expect(result).toBe(false)
-});
-
-test("combineColoursArrays_whenGivenDuplicateColours_ShouldReturnCombinedColours", () => {
-    const colours = ["W", "U", "R", "U"];
-    const expectedResult = ["W", "U", "R"];
-
-    const result = combineColoursArrays(colours);
+    const result = convertJsonCardsToEntries(jsonCards)
 
     expect(result).toEqual(expectedResult)
-});
-
-test("combineColourIdentityArrays_whenGivenCardFaceObjects_ShouldReturnCombinedColours", () => {
-    const cardFaces = [{ color_identity: ["W", "U", "R"] }, { color_identity: ["W", "U"] }];
-    const expectedResult = ["W", "U", "R"];
-
-    const result = combineColourIdentityArrays(cardFaces);
-
-    expect(result).toEqual(expectedResult)
-});
-
-test("combineManaColourArrays_whenGivenCardFaceObjects_ShouldReturnCombinedColours", () => {
-    const cardFaces = [{ colors: ["W", "U", "R"] }, { colors: ["W", "U"] }];
-    const expectedResult = ["W", "U", "R"];
-
-    const result = combineManaColoursArrays(cardFaces);
-
-    expect(result).toEqual(expectedResult)
-});
-
-test("cleanJsonCards_whenCardIsNotLegal_ShouldReturnCard", () => {
-    const card = {
-        layout: "normal",
-        border_color: "black"
-    }
-    const token = {
-        layout: "token",
-        border_color: "black"
-    }
-    const badCard = {
-        layout: "token",
-        border_color: "silver"
-    }
-    const jokeCard = {
-        border_color: "silver",
-        layout: "normal"
-    }
-
-    const result = cleanJsonCards([card, token, badCard, jokeCard]);
-
-    expect(result.length).toEqual(1)
-});
+})
