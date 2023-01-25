@@ -140,15 +140,17 @@ app.listen(process.env.PORT, () => {
 
     const cardsNeedUpdate = checkCardsNeedsUpdate()
     console.log(cardsNeedUpdate)
-    if (cardsNeedUpdate) {
-        getDownloadUrl().then((url) => {
-            console.log("uploading card entrys")
-            getBulkDataFile(url)
-            uploadCardEntries(db).then(() => {
-                console.log('upsert successful')
-            }).catch(error => {
-                console.error(`Upsert failed: ${error}`)
-            })
+    if (true) {
+        // getDownloadUrl().then((url) => {
+        //     console.log("uploading card entrys")
+        //     getBulkDataFile(url).then(() => {
+        console.log("download finished")
+        uploadCardEntries(db).then(() => {
+            console.log('upsert successful')
+        }).catch(error => {
+            console.error(`Upsert failed: ${error}`)
         })
+        // })
+        // })
     }
 })
