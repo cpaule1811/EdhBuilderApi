@@ -24,6 +24,21 @@ services:
       PGDATA: /var/lib/postgresql/data/pgdata
     networks:
       - database-network
+  testPostgres: 
+    image: postgres:13.1-alpine
+    container_name: testPostgres
+    ports:
+      - 5433:5432
+    volumes:
+      - ./data:/var/lib/postgresql/data
+      - ./data/init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      PGDATA: /var/lib/postgresql/data/pgdata-test
+    networks:
+      - test-network
 
 networks:
   database-network:
+  test-network:

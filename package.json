@@ -3,10 +3,15 @@
     "version": "1.0.0",
     "description": "api to send card and user data to and from edh builder",
     "main": "server.js",
+    "jest": {
+        "setupFiles": [
+            "./.jest/setEnvVars.js"
+        ]
+    },
     "scripts": {
         "test": "jest",
         "start": "node server.js",
-        "start:dev": "nodemon --ignore ./data/ server.js"
+        "dev": "nodemon --ignore ./data/ server.js"
     },
     "repository": {
         "type": "git",

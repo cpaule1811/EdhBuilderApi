@@ -34,7 +34,7 @@ const reset = require('./controllers/updatePassword')
 const forgot = require('./controllers/forgotpassword')
 const jsonFile = require('./controllers/jsonfile')
 
-const { checkCardsNeedsUpdate, updateEntries, removeBulkDataFile } = require('./services/UploadCardEntries')
+const { checkCardsNeedsUpdate, updateEntries, removeBulkDataFile } = require('./utils/UploadCardEntries')
 
 const dotenv = require('dotenv');
 dotenv.config();
