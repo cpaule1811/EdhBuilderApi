@@ -1,14 +1,6 @@
 const jwt = require('jsonwebtoken');
-const redis = require("redis");
-const redisClient = redis.createClient({
-    url: process.env.REDIS_URL
-});
-
-redisClient.on("error", function (error) {
-    console.error(error);
-});
-
-const { OAuth2Client } = require('google-auth-library')
+const { OAuth2Client } = require('google-auth-library');
+const redisClient = require("../redisClient");
 const googleClient = new OAuth2Client(process.env.GOOGLE_API_KEY)
 
 const handleSigninGoogle = async (req, res, db, token) => {

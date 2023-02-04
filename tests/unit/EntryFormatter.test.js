@@ -1,4 +1,13 @@
-const { checkIsDualFacedCard, checkCardIsPartner, checkIsLegalCardType, checkIsLegalBorder, combineColoursArrays, combineColourIdentityArrays, combineManaColoursArrays, filterIllegalCards } = require("./EntryFormatter.js");
+const {
+    checkIsDualFacedCard,
+    checkCardIsPartner,
+    checkIsLegalCardType,
+    checkIsLegalBorder,
+    combineColoursArrays,
+    combineColourIdentityArrays,
+    combineManaColoursArrays,
+    filterIllegalCards
+} = require("../../utils/EntryFormatter.js");
 
 test("checkIsDualFacedCard_whenCardIsDualFaced_ShouldReturnTrue", () => {
     const layout = "transform";

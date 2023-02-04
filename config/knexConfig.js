@@ -10,6 +10,12 @@ module.exports = {
         connection: {
             connectionString: databaseUrl
         }
+    },
+    test: {
+        client: 'pg',
+        connection: {
+            connectionString: databaseUrl
+        }
 
     },
     production: {

@@ -34,6 +34,8 @@ const reset = require('./controllers/updatePassword')
 const forgot = require('./controllers/forgotpassword')
 const jsonFile = require('./controllers/jsonfile')
 
+const cardRouter = require('./routers/card')
+
 const { checkCardsNeedsUpdate, updateEntries, removeBulkDataFile } = require('./utils/UploadCardEntries')
 
 const dotenv = require('dotenv');
@@ -46,10 +48,12 @@ const db = knex({ ...knexConfig })
 app.use(fileUpload({
     limits: { fileSize: 3 * 1024 * 1024 },
 }));
+
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json({ limit: "2mb" }))
 app.use(cors())
 app.use(compression())
+app.use("/card", cardRouter)
 
 //site data get requests
 app.get('/', (req, res) => res.json("hello world"))
@@ -139,6 +143,9 @@ app.post('/send', sanitize.sanitizeData, (req, res) => {
 app.listen(process.env.PORT, async () => {
     console.log('listening to server port:' + process.env.PORT)
 
+    if (process.env.ENVIRONMENT !== "production")
+        return;
+
     const cardsNeedUpdate = checkCardsNeedsUpdate()
     if (cardsNeedUpdate) {
         removeBulkDataFile();
@@ -152,3 +159,5 @@ app.listen(process.env.PORT, async () => {
         await updateEntries();
     });
 })
+
+module.exports = app;

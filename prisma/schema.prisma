@@ -19,23 +19,18 @@ model User {
 }
 
 model Deck {
-    id              Int       @id @default(autoincrement())
-    user            User      @relation(fields: [userId], references: [id])
-    userId          Int
-    name            String
-    commander       String
-    created         DateTime?
-    partner         String?
-    description     String?
-    imageUrl        String?
-    imageUrl2       String?
-    partnerImageUrl String?
-    cardArt         String?
-    color           String?
-    artist          String?
-    avgRating       Float?
-    cards           Card[]
-    rating          Rating[]
+    id          Int       @id @default(autoincrement())
+    name        String
+    description String?
+    created     DateTime?
+    commanderId Int
+    user        User      @relation(fields: [userId], references: [id])
+    userId      Int
+    commander   Entry     @relation(name: "commander", fields: [commanderId], references: [id])
+    partnerId   Int?
+    partner     Entry?    @relation(name: "partner", fields: [partnerId], references: [id])
+    rating      Rating[]
+    Card        Card[]    @relation(name: "cards")
 }
 
 model Card {
@@ -44,8 +39,10 @@ model Card {
     cardStatus String?
     entry      Entry   @relation(fields: [entryId], references: [id])
     entryId    Int
-    Deck       Deck?   @relation(fields: [deckId], references: [id])
     deckId     Int?
+    Deck       Deck?   @relation(name: "cards", fields: [deckId], references: [id], onDelete: Cascade)
+
+    @@unique([entryId, deckId])
 }
 
 model Rating {
@@ -55,6 +52,8 @@ model Rating {
     rating Float
     user   User  @relation(fields: [userId], references: [id])
     userId Int
+
+    @@unique([deckId, userId])
 }
 
 model Entry {
@@ -75,4 +74,6 @@ model Entry {
     isPartner    Boolean?
     artist       String?
     Card         Card[]
+    Partner      Deck[]   @relation(name: "partner")
+    Commander    Deck[]   @relation(name: "commander")
 }
