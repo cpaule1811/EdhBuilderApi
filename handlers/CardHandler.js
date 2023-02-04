@@ -3,8 +3,6 @@ const CardServiceError = CardService.CardServiceError;
 
 async function add(req, res) {
     const { entryId, quantity, cardStatus, deckId } = req.body;
-    console.log("deckId: ", deckId)
-    console.log(cardStatus)
     const card = {
         entryId,
         quantity,
@@ -41,6 +39,10 @@ async function add(req, res) {
     res.status(400).json({
         message: result.message
     })
+}
+
+async function remove(req, res) {
+
 }
 
 module.exports = CardHandler = {

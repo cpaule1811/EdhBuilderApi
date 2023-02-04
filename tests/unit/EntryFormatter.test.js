@@ -7,7 +7,7 @@ const {
     combineColourIdentityArrays,
     combineManaColoursArrays,
     filterIllegalCards
-} = require("../../utils/EntryFormatter.js");
+} = require("../../services/EntryFormatService.js");
 
 test("checkIsDualFacedCard_whenCardIsDualFaced_ShouldReturnTrue", () => {
     const layout = "transform";

@@ -1,4 +1,4 @@
-const { convertJsonCardsToEntries } = require("./UploadCardEntries");
+const { convertJsonCardsToEntries } = require("../../services/EntryService");
 
 test("convertJsonCardsToEntries_whenGivenJsonCards_shouldReturnEntries", () => {
     const jsonCards = [{

@@ -9,7 +9,8 @@
         ]
     },
     "scripts": {
-        "test:integration": "jest --findRelatedTests tests/integration/*.test.js --forceExit",
+        "test": "jest --detectOpenHandles",
+        "test:integration": "jest --findRelatedTests tests/integration/*.test.js",
         "test:unit": "jest --findRelatedTests tests/unit/*.test.js",
         "test:component": "jest --findRelatedTests tests/component/*.test.js",
         "start": "node server.js",

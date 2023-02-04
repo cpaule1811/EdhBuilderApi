@@ -1,4 +1,4 @@
-const { prismaClient } = require('../prismaClient');
+const prismaClient = require('../prismaClient');
 
 async function clearTestDB() {
     await prismaClient.$transaction([

@@ -1,8 +1,14 @@
 const https = require('https');
 const fs = require('fs');
 const path = require('path');
-const { prismaClient } = require('../prismaClient');
-const { checkIsDualFacedCard, checkCardIsPartner, combineColourIdentityArrays, combineManaColoursArrays, filterIllegalCards } = require("./EntryFormatter.js");
+const prismaClient = require('../prismaClient');
+const {
+    checkIsDualFacedCard,
+    checkCardIsPartner,
+    combineColourIdentityArrays,
+    combineManaColoursArrays,
+    filterIllegalCards
+} = require("./EntryFormatService.js");
 
 function checkCardsNeedsUpdate() {
     const path = "./data/cards.json";

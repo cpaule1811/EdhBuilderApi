@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { OAuth2Client } = require('google-auth-library');
-const redisClient = require("../redisClient");
+const { redisClient } = require("../redisClient");
 const googleClient = new OAuth2Client(process.env.GOOGLE_API_KEY)
 
 const handleSigninGoogle = async (req, res, db, token) => {

@@ -1,6 +1,6 @@
 const e = require("express");
 const { PrismaError } = require("../prisma/PrismaError");
-const { prismaClient } = require("../prismaClient");
+const prismaClient = require("../prismaClient");
 
 const CardServiceError = {
     CARD_NOT_FOUND: "Could not find specified card.",
@@ -134,10 +134,12 @@ async function get(cardId) {
     }
 }
 
-module.exports = {
+const CardService = {
     add,
     update,
     drop,
     get,
     CardServiceError
-};
+}
+
+module.exports = CardService;

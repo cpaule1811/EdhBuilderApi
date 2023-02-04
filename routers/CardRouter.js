@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const CardHandler = require('../handlers/card');
+const CardHandler = require('../handlers/CardHandler');
 
 const cardRouter = Router();
 

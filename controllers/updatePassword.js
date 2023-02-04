@@ -1,4 +1,4 @@
-const redisClient = require('../redisClient')
+const { redisClient } = require('../redisClient')
 
 const handleValidUnique = (req, res) => {
     const { authorization } = req.headers

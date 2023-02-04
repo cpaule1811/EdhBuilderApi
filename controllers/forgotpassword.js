@@ -1,4 +1,4 @@
-const redisClient = require('../redisClient')
+const { redisClient } = require('../redisClient')
 
 const handleForgot = (req, res, db, nodemailer) => {
     const { email } = req.body

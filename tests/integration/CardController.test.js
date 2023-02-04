@@ -1,8 +1,7 @@
 const request = require('supertest');
-const { prismaClient } = require('../../prismaClient');
+const prismaClient = require('../../prismaClient');
 const { clearTestDB, setupDeck } = require('../cardTestSetup');
-const app = require('../../server.js');
-const redisClient = require('../../redisClient');
+const app = require('../../app.js');
 
 let testDeckId;
 
@@ -14,7 +13,6 @@ beforeAll(async () => {
 afterAll(async () => {
     await clearTestDB();
     await prismaClient.$disconnect()
-    await redisClient.quit()
 })
 
 afterEach(async () => {
@@ -88,4 +86,38 @@ describe("CardController_add", () => {
         expect(body.card.entryId).toEqual(entryId);
         expect(body.card.quantity).toEqual(quantity);
     })
+})
+
+describe("CardController_remove", () => {
+    let existingCardId;
+    beforeAll(async () => {
+        const existingCard = await prismaClient.card.create({
+            data: {
+                entryId: 4,
+                deckId: testDeckId,
+                quantity: 1,
+            }
+        })
+
+        existingCardId = existingCard.id;
+    })
+
+    test("remove_whenGivenBadCardId_shouldReturnNotFoundStatus", async () => {
+        const expectedResponseCode = 404;
+        const cardId = -1;
+
+        const response = await request(app).post("/card/remove").send({ cardId });
+
+        expect(response.status).toEqual(expectedResponseCode);
+    });
+
+    test("remove_whenGivenValidCardId_shouldDeleteCard", async () => {
+        const expectedResponseCode = 200;
+
+        const response = await request(app).post("/card/remove").send({ existingCardId });
+
+        expect(response.status).toEqual(expectedResponseCode);
+        expect(response.body.cardId).toEqual(cardId);
+    })
+
 })

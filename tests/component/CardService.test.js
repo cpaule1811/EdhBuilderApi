@@ -1,4 +1,4 @@
-const { prismaClient } = require('../../prismaClient');
+const prismaClient = require('../../prismaClient');
 const CardService = require('../../services/CardService.js');
 const CardServiceError = CardService.CardServiceError;
 
@@ -243,13 +243,10 @@ describe("CardService_get", () => {
                 entryId: 4,
                 quantity: 1,
                 cardStatus: "mainboard",
-                deckId: 1,
+                deckId: testDeckId,
             }
         })
         const cardId = insertedCard.id;
-        const expectedResult = {
-            isSuccessful: true,
-        }
 
         const result = await CardService.get(cardId)
 
